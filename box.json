@@ -1,0 +1,23 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src"
+  ],
+  "files": [
+    "LICENSE.md",
+    "README.md"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "Tests"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "git-version": "package_version",
+  "main": "mt.php",
+  "output": "bin/mt.phar",
+  "stub": true
+}

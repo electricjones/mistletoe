@@ -9,7 +9,7 @@ use Mistletoe\Application\Commands\RunDueCommand;
 use Mistletoe\Application\Commands\RunTaskCommand;
 use Symfony\Component\Console\Application;
 
-$application = new Application();
+$application = new Application('Mistletoe', '@package_version@');
 $application->add(new RunDueCommand());
 $application->add(new RunTaskCommand());
 $application->add(new RunAllCommand());
