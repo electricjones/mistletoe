@@ -148,7 +148,11 @@ class TaskBag implements TaskBagInterface
      */
     public function addDate($date)
     {
-        return $this->setDate($date);
+        $parts = $this->parseDate($date);
+        $this->addMonth(intval($parts[0]));
+        $this->addDay(intval($parts[1]));
+
+        return $this;
     }
 
     /**
