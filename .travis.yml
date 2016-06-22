@@ -20,10 +20,14 @@ matrix:
   allow_failures:
      - php: nightly
      - php: 5.5
+     - php: hhvm
 
   include:
     - php: 5.5
       env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+
+  exclude:
+    - php: 5.5
 
 before_script:
   - travis_retry composer self-update
