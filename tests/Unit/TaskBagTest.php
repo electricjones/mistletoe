@@ -1,4 +1,4 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Unit;
 
 /* The Getter and Setter methods are all tested in `TaskPlannerTest`. No need to duplicate */
 use Cron\CronExpression;

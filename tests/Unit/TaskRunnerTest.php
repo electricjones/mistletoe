@@ -1,10 +1,11 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Unit;
 
 use Cron\CronExpression;
 use Mistletoe\Command;
 use Mistletoe\Runners\GenericTaskRunner as TaskRunner;
 use Mistletoe\TaskBag;
 use Mistletoe\Test\Mocks\MockTask1;
+use Mistletoe\Test\Mocks\MockTask2;
 use Mistletoe\Test\Mocks\MockTask3;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
@@ -27,8 +28,8 @@ class TaskRunnerTest extends PHPUnit_Framework_TestCase
                 'environments' => ['PRODUCTION']
             ]),
 
-            Mocks\MockTask2::class => new TaskBag([
-                'task' => Mocks\MockTask2::class,
+            MockTask2::class => new TaskBag([
+                'task' => MockTask2::class,
                 'cronExpression' => CronExpression::factory('45 * * * *'),
                 'environments' => ['PRODUCTION', 'DEVELOPMENT']
             ]),
@@ -78,7 +79,6 @@ class TaskRunnerTest extends PHPUnit_Framework_TestCase
          * @var $runner TaskRunner
          */
         $runner->setCurrentTime('2016-1-1 12:30'); // for testing purposes
-        $runner->setNamespacePrefix('Some');
         $runner->setCurrentEnvironment('PRODUCTION');
         return $runner;
     }

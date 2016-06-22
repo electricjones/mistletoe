@@ -1,4 +1,4 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Unit;
 
 use Mistletoe\TaskBag;
 use Mistletoe\TaskPlanner;
@@ -205,7 +205,7 @@ class TaskPlannerTest extends PHPUnit_Framework_TestCase
             ->at('13:14');
 
         $expected = [
-            'SomeTask' => (new TaskBag('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT, TaskPlanner::DEVELOPMENT_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
+            'SomeTask' => (new TaskBag('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
             'AnotherTask' => (new TaskBag('AnotherTask'))->setInterval('@daily')->setTime('13:14')->addEnvironment('STAGING'),
             'ThirdTask' => (new TaskBag('ThirdTask'))->setWeekday('6,0')->setMonth('2,4,6')->setTime('13:14')
         ];

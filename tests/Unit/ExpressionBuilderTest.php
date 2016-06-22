@@ -1,5 +1,6 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Unit;
 
+use Cron\CronExpression;
 use Mistletoe\ExpressionBuilder;
 use Mistletoe\TaskBag;
 use PHPUnit_Framework_TestCase;
@@ -11,11 +12,11 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
     {
         $builder = new ExpressionBuilder();
         $actual = $builder->buildFrom('1 1 1 1 1');
-        $this->assertEquals(\Cron\CronExpression::factory('1 1 1 1 1'), $actual, 'failed to build from first expression');
+        $this->assertEquals(CronExpression::factory('1 1 1 1 1'), $actual, 'failed to build from first expression');
 
         $builder = new ExpressionBuilder();
         $actual = $builder->buildFrom('2 2 * * *');
-        $this->assertEquals(\Cron\CronExpression::factory('2 2 * * *'), $actual, 'failed to build from second expression');
+        $this->assertEquals(CronExpression::factory('2 2 * * *'), $actual, 'failed to build from second expression');
     }
     
     /** @test */
@@ -27,7 +28,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
                 (new TaskBag('Task'))->setInterval($interval)
             );
             $actual = $builder->build();
-            $expected = \Cron\CronExpression::factory($interval);
+            $expected = CronExpression::factory($interval);
             
             $this->assertEquals($expected, $actual, "failed to build from $interval");
         }
@@ -47,7 +48,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
                 (new TaskBag('Task'))->setTime($time)
             );
             $actual = $builder->build();
-            $expected = \Cron\CronExpression::factory($expression);
+            $expected = CronExpression::factory($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $time");
         }
@@ -67,7 +68,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
                 (new TaskBag('Task'))->setDate($date)
             );
             $actual = $builder->build();
-            $expected = \Cron\CronExpression::factory($expression);
+            $expected = CronExpression::factory($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $date");
         }
@@ -89,7 +90,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
                 (new TaskBag('Task'))->setDate($time[0])->setTime($time[1])
             );
             $actual = $builder->build();
-            $expected = \Cron\CronExpression::factory($expression);
+            $expected = CronExpression::factory($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $date");
         }
@@ -109,7 +110,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = \Cron\CronExpression::factory('20 7 * * *');
+        $expected = CronExpression::factory('20 7 * * *');
 
         $this->assertEquals($expected, $actual, "failed to build from the first scenario");
 
@@ -125,7 +126,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = \Cron\CronExpression::factory('0 12 * 6 4,6,0');
+        $expected = CronExpression::factory('0 12 * 6 4,6,0');
 
         $this->assertEquals($expected, $actual, "failed to build from the weekday scenario");
 
@@ -142,7 +143,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = \Cron\CronExpression::factory('30 15 12 * *');
+        $expected = CronExpression::factory('30 15 12 * *');
 
         $this->assertEquals($expected, $actual, "failed to build from the second scenario");
 
@@ -160,7 +161,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = \Cron\CronExpression::factory('24 0 1 7 *');
+        $expected = CronExpression::factory('24 0 1 7 *');
 
         $this->assertEquals($expected, $actual, "failed to build from the third scenario");
 
@@ -176,7 +177,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = \Cron\CronExpression::factory('30,59 1,4,8 2,4,9 1,3,9 *');
+        $expected = CronExpression::factory('30,59 1,4,8 2,4,9 1,3,9 *');
 
         $this->assertEquals($expected, $actual, "failed to build from the complex scenario");
     }

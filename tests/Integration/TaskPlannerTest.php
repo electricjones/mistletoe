@@ -1,8 +1,9 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Integration;
 
 use Mistletoe\TaskPlanner;
+use Mistletoe\Test\ScenarioSetups;
 
-class TaskPlannerIntegrationTest extends ScenarioSetups
+class TaskPlanneTest extends ScenarioSetups
 {
     /** @test */
     public function TestSimpleExpression()

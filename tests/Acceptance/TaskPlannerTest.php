@@ -1,6 +1,8 @@
-<?php namespace Mistletoe\Test;
+<?php namespace Mistletoe\Test\Acceptance;
 
-class TaskPlannerAcceptanceTest extends ScenarioSetups
+use Mistletoe\Test\ScenarioSetups;
+
+class TaskPlannerTest extends ScenarioSetups
 {
     public function setUp()
     {
