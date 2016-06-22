@@ -3,7 +3,7 @@
 [![Latest Version](https://img.shields.io/github/release/chrismichaels84/mistletoe.svg?style=flat-square)](https://github.com/chrismichaels84/mistletoe/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://travis-ci.org/chrismichaels84/mistletoe.svg?branch=master)](https://travis-ci.org/chrismichaels84/mistletoe)
-[![Coverage Status](https://coveralls.io/repos/github/chrismichaels84/mistletoe/badge.svg?branch=master)](https://coveralls.io/github/chrismichaels84/mistletoe?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/chrismichaels84/mistletoe/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/chrismichaels84/mistletoe/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrismichaels84/mistletoe/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrismichaels84/mistletoe/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/michaels/mistletoe.svg?style=flat-square)](https://packagist.org/packages/michaels/mistletoe)
 

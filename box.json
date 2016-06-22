@@ -18,6 +18,6 @@
   ],
   "git-version": "package_version",
   "main": "mt.php",
-  "output": "bin/mt",
+  "output": "mt.phar",
   "stub": true
 }

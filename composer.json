@@ -25,6 +25,9 @@
       "scrutinizer/ocular": "~1.1",
       "squizlabs/php_codesniffer": "~2.3"
     },
+  "bin": [
+    "mt"
+  ],
     "autoload": {
         "psr-4": {
             "Mistletoe\\": "src"
