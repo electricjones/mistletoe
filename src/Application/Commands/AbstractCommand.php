@@ -106,7 +106,7 @@ abstract class AbstractCommand extends Command
         // Load the config file (which returns a TaskPlanner)
         $cwd = getcwd();
 
-        if ($path) {
+        if ($path !== null) {
             // Were we were given a valid relative path?
             // If not, then we must assume it is an absolute path
             if (file_exists("{$cwd}/{$path}")) {

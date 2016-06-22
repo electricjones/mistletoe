@@ -162,7 +162,7 @@ interface TaskBagInterface
     public function addEnvironment($environment);
 
     /**
-     * @return string
+     * @return array
      */
     public function getEnvironments();
 
@@ -198,7 +198,7 @@ interface TaskBagInterface
      * @param ExpressionBuilderInterface $expressionBuilder
      * @return void
      */
-    public function setExpressionBuilder($expressionBuilder);
+    public function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder);
 
     /**
      * @param string $currentTime

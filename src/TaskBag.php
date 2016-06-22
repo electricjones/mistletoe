@@ -16,33 +16,33 @@ class TaskBag implements TaskBagInterface
     /** @var array */
     protected $environments = [TaskPlanner::PRODUCTION_ENVIRONMENT, TaskPlanner::DEVELOPMENT_ENVIRONMENT];
 
-    /** @var array Tasks that must follow this one */
+    /** @var array|string Tasks that must follow this one */
     protected $followedBy = [];
 
     /** @var  CronExpression */
     protected $cronExpression;
 
     /* Expressions */
-    /** @var null|string */
-    protected $interval = null; // @daily, @yearly
+    /** @var bool|string */
+    protected $interval = false; // @daily, @yearly
 
-    /** @var null|string|int */
+    /** @var null|string|int|array */
     protected $minute = null;
 
-    /** @var null|string|int */
+    /** @var null|string|int|array */
     protected $hour = null;
 
-    /** @var null|string|int */
+    /** @var null|string|int|array */
     protected $month = null; // 12
 
-    /** @var null|string|int */
+    /** @var null|string|int|array */
     protected $day = null; // 25
 
-    /** @var null|string|int */
+    /** @var null|string|int|array */
     protected $weekday = null;
 
     /* Dependencies */
-    /** @var ExpressionBuilder */
+    /** @var ExpressionBuilderInterface */
     protected $expressionBuilder;
 
 
@@ -84,7 +84,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @return null|string
+     * @return bool|string
      */
     public function getInterval()
     {
@@ -148,11 +148,7 @@ class TaskBag implements TaskBagInterface
      */
     public function addDate($date)
     {
-        $parts = $this->parseDate($date);
-        $this->addMonth(intval($parts[0]));
-        $this->addDay(intval($parts[1]));
-
-        return $this;
+        return $this->setDate($date);
     }
 
     /**
@@ -214,6 +210,7 @@ class TaskBag implements TaskBagInterface
     /**
      * @param string|int|array $minute
      * @return $this
+     * @throws \Exception
      */
     public function setMinute($minute)
     {
@@ -316,7 +313,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getEnvironments()
     {
@@ -385,7 +382,7 @@ class TaskBag implements TaskBagInterface
     /**
      * @param ExpressionBuilderInterface $expressionBuilder
      */
-    public function setExpressionBuilder($expressionBuilder)
+    public function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
     {
         $this->expressionBuilder = $expressionBuilder;
     }
