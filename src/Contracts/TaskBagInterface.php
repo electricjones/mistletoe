@@ -72,7 +72,7 @@ interface TaskBagInterface
     public function setMonth($month);
 
     /**
-     * @return int|null|string
+     * @return int|null|string|array
      */
     public function getMonth();
 
@@ -89,7 +89,7 @@ interface TaskBagInterface
     public function setDay($day);
 
     /**
-     * @return int|null|string
+     * @return int|null|string|array
      */
     public function getDay();
 
@@ -106,7 +106,7 @@ interface TaskBagInterface
     public function setMinute($minute);
 
     /**
-     * @return int|null|string
+     * @return int|null|string|array
      */
     public function getMinute();
 
@@ -123,7 +123,7 @@ interface TaskBagInterface
     public function setHour($hour);
 
     /**
-     * @return int|null|string
+     * @return int|null|string|array
      */
     public function getHour();
 
@@ -140,7 +140,7 @@ interface TaskBagInterface
     public function setWeekday($weekday);
 
     /**
-     * @return int|null|string
+     * @return int|null|string|array
      */
     public function getWeekday();
 
@@ -173,12 +173,12 @@ interface TaskBagInterface
     public function addFollowedBy($task);
 
     /**
-     * @return array
+     * @return array|string
      */
     public function getFollowedBy();
 
     /**
-     * @param string $followedBy
+     * @param string|array $followedBy
      * @return $this
      */
     public function setFollowedBy($followedBy);

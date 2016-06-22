@@ -23,8 +23,8 @@ class TaskBag implements TaskBagInterface
     protected $cronExpression;
 
     /* Expressions */
-    /** @var bool|string */
-    protected $interval = false; // @daily, @yearly
+    /** @var null|string */
+    protected $interval = null; // @daily, @yearly
 
     /** @var null|string|int|array */
     protected $minute = null;
@@ -84,7 +84,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @return bool|string
+     * @return null|string
      */
     public function getInterval()
     {
@@ -166,7 +166,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @return int|null|string
+     * @return int|bool|string
      */
     public function getMonth()
     {

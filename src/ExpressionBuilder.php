@@ -90,11 +90,11 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      */
     protected function onlyIntervalIsSet(TaskBag $bag)
     {
-        return $bag->getInterval()
-        && !$bag->getMonth()
-        && !$bag->getDay()
-        && !$bag->getMinute()
-        && !$bag->getHour();
+        return $bag->getInterval() !== null
+        && $bag->getMonth() === null
+        && $bag->getDay() === null
+        && $bag->getMinute() === null
+        && $bag->getHour() === null;
     }
 
     /**

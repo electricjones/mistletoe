@@ -22,7 +22,7 @@ $planner = (new Mistletoe\TaskPlanner())
     ->add(function(){ echo "do something"; })->every5Minutes();
 ```
 
-In your crontasks, simply add `/path/to/bin/mt.phar run:due` to execute how ever often you want.
+In your crontasks, simply add `/path/to/bin/mt run:due` to execute how ever often you want.
 
 ### Includes Full Support For
   * Simplify ALL cronjobs into a single job
@@ -42,7 +42,7 @@ You can use mistletoe in one of three ways:
 
 You may download a ready-to-use version of Box as a Phar:
    * Go to https://github.com/chrismichaels84/mistletoe/releases/latest
-   * Download the `mt.phar` under Downloads
+   * Download the `mt` under Downloads
    * Put it somewhere you'll remember it and/or add it to your path!
 
 ### As a Global Composer Install (Better)
@@ -68,7 +68,7 @@ $ composer require chrismichaels84/mistletoe
 ```json
 {
     "require-dev": {
-        "chrismichaels84/mistletoe": "~1.0"
+        "chrismichaels84/mistletoe": "~0.9"
     }
 }
 ```
@@ -93,9 +93,9 @@ in the current working directory. You may specify a relative or absolute path to
 that returns a TaskPlanner instance.
 
 For example:
-  * `mt.phar list:all` - assumes `mistletoe.php` is in this dir
-  * `mt.phar list:all /full/path/to/file.php` - will use the full path
-  * `mt.phar list:all ../to/file.php` - will use the relative path
+  * `mt list:all` - assumes `mistletoe.php` is in this dir
+  * `mt list:all /full/path/to/file.php` - will use the full path
+  * `mt list:all ../to/file.php` - will use the relative path
 
 #### Commands
   * `list:all` - Lists ALL the commands that are register with info about each
@@ -108,7 +108,7 @@ For example:
 #### Options
 If you set the verbosity level to "verbose" or higher, it will print extra information.
 ```php
-mt.phar list:all -v
+mt list:all -v
 ```
 See http://symfony.com/doc/current/components/console/introduction.html#verbosity-levels for more information.
 
