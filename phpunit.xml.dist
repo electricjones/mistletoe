@@ -17,7 +17,18 @@
     <filter>
         <whitelist>
             <directory suffix=".php">src/</directory>
+            <!-- For Code Coverage -->
+            <exclude>
+                <file>src/CronSchedule.php</file>
+                <file>src/Application/Commands/ListAllCommand.php</file>
+                <file>src/Application/Commands/ListDueCommand.php</file>
+                <file>src/Application/Commands/RunAllCommand.php</file>
+                <file>src/Application/Commands/RunDueCommand.php</file>
+                <file>src/Application/Commands/RunTaskCommand.php</file>
+            </exclude>
+            <file>src/Application/Commands/AbstractCommand.php</file>
         </whitelist>
+
     </filter>
     <logging>
         <log type="tap" target="build/report.tap"/>
