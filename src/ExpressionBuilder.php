@@ -56,7 +56,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
 
     /**
      * Builds expression from a string expression
-     * @param $string
+     * @param null|string $string
      * @return CronExpression
      */
     public function buildFrom($string)
@@ -113,7 +113,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
 
     /**
      * Returns the part from the bag with * as default
-     * @param $part
+     * @param string $part
      * @return string
      */
     protected function getPartWithDefault($part)

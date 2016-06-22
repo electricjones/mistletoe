@@ -1,7 +1,7 @@
 <?php
 namespace Mistletoe;
-use Mistletoe\Runners\GenericTaskRunner;
 use Mistletoe\Contracts\TaskRunnerInterface;
+use Mistletoe\Runners\GenericTaskRunner;
 
 /**
  * Class TaskPlanner
@@ -64,7 +64,7 @@ class TaskPlanner
     /* Schedule a full expression */
     /**
      * Add a full expression
-     * @param $expression
+     * @param string $expression
      * @return $this
      */
     public function schedule($expression)
@@ -475,7 +475,7 @@ class TaskPlanner
     }
 
     /**
-     * @return $this
+     * @return TaskRunnerInterface
      */
     public function getTaskRunner()
     {
@@ -550,7 +550,7 @@ class TaskPlanner
     /* Internal Methods */
     /**
      * @param string $task
-     * @param null $body
+     * @param \Closure|null $body
      */
     protected function createNewTask($task, $body = null)
     {
@@ -578,6 +578,9 @@ class TaskPlanner
         return $this->currentTask;
     }
 
+    /**
+     * @return null|string
+     */
     private function getNextClosureIncrement()
     {
         $this->closureIncrement++;
@@ -585,7 +588,7 @@ class TaskPlanner
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrentTime()
     {
