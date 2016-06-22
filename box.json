@@ -1,4 +1,5 @@
 {
+  "alias": "mt.phar",
   "chmod": "0755",
   "directories": [
     "src"
@@ -16,8 +17,12 @@
       "in": "vendor"
     }
   ],
+  "compactors": [
+    "Herrera\\Box\\Compactor\\Json",
+    "Herrera\\Box\\Compactor\\Php"
+  ],
   "git-version": "package_version",
   "main": "mt.php",
-  "output": "mt.phar",
+  "output": "bin/mt.phar",
   "stub": true
 }

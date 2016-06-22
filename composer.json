@@ -26,7 +26,7 @@
       "squizlabs/php_codesniffer": "~2.3"
     },
   "bin": [
-    "mt"
+    "bin/mt"
   ],
     "autoload": {
         "psr-4": {
