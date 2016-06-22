@@ -53,6 +53,8 @@ This is probably the best way when you have other tools like phpunit and other t
 $ composer global require michaels/mistletoe --prefer-source
 ```
 
+You *may* need to add composer's bin directory to your path.
+
 ### As a Composer Dependency (Advanced)
 
 You may also install Mistletoe as a dependency for your Composer managed project:
