@@ -23,7 +23,6 @@
     "require-dev": {
       "phpunit/phpunit": "~5.0",
       "scrutinizer/ocular": "~1.1",
-      "satooshi/php-coveralls": "1.*",
       "squizlabs/php_codesniffer": "~2.3"
     },
     "autoload": {

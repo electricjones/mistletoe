@@ -45,3 +45,4 @@ tools:
             excluded_paths:
                 - 'tests/*'
                 - 'vendor/*'
+    external_code_coverage: true
