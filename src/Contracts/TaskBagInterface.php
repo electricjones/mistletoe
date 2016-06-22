@@ -150,6 +150,9 @@ interface TaskBagInterface
      */
     public function addWeekday($weekday);
 
+    /**
+     * @return TaskBag
+     */
     public function setEnvironments($environments);
 
     /**
@@ -193,6 +196,7 @@ interface TaskBagInterface
 
     /**
      * @param ExpressionBuilderInterface $expressionBuilder
+     * @return void
      */
     public function setExpressionBuilder($expressionBuilder);
 
@@ -206,6 +210,7 @@ interface TaskBagInterface
      * @param string $currentTime
      * @param int $nth
      * @param bool $allowCurrentDate
+     * @return void
      */
     public function getNextRunDate($currentTime = 'now', $nth = 0, $allowCurrentDate = false);
 
@@ -213,6 +218,7 @@ interface TaskBagInterface
      * @param string $currentTime
      * @param int $nth
      * @param bool $allowCurrentDate
+     * @return void
      */
     public function getPreviousRunDate($currentTime = 'now', $nth = 0, $allowCurrentDate = false);
 }

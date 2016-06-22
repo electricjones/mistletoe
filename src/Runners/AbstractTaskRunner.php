@@ -39,7 +39,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrentTime()
     {
