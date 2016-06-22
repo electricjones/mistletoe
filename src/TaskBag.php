@@ -48,7 +48,7 @@ class TaskBag implements TaskBagInterface
 
     /**
      * TaskBag constructor.
-     * @param null $task
+     * @param string $task
      */
     public function __construct($task = null)
     {
@@ -74,7 +74,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param $task
+     * @param string $task
      * @return $this
      */
     public function setTask($task)
@@ -92,7 +92,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param $interval
+     * @param string $interval
      * @return $this
      */
     public function setInterval($interval)
@@ -116,7 +116,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param $time
+     * @param string $time
      * @return $this
      */
     public function addTime($time)
@@ -156,7 +156,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param string|int|array $month
+     * @param integer $month
      * @return $this
      */
     public function setMonth($month)
@@ -184,7 +184,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param string|int|array $day
+     * @param integer $day
      * @return $this
      */
     public function setDay($day)
@@ -441,7 +441,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param $date
+     * @param string $date
      * @return array
      */
     protected function parseDate($date)
@@ -456,7 +456,7 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param $value
      * @param string $deliminator
      */

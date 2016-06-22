@@ -145,6 +145,12 @@ class CronSchedule
      *                'hasInterval'        TRUE if a range is specified. FALSE otherwise
      *                'interval'            The interval if a range is specified.
      */
+
+    /**
+     * @param integer $rangeMin
+     * @param integer $rangeMax
+     * @param string $errorName
+     */
     final private function cronInterpret($specification, $rangeMin, $rangeMax, $namedItems, $errorName)
     {
 
@@ -476,6 +482,9 @@ class CronSchedule
     // Result:        FALSE if current did not overflow (reset back to the earliest possible value). TRUE if it did.
     //
 
+    /**
+     * @param integer $rangeMin
+     */
     final private function advanceItem($arrItems, $rangeMin, $rangeMax, & $current)
     {
 
@@ -654,6 +663,9 @@ class CronSchedule
     // Result:        FALSE if current did not overflow (reset back to the highest possible value). TRUE if it did.
     //
 
+    /**
+     * @param integer $rangeMin
+     */
     final private function recedeItem($arrItems, $rangeMin, $rangeMax, & $current)
     {
 
@@ -1027,6 +1039,11 @@ class CronSchedule
         return (strlen($number) == 1 ? '0' : '').$number;
     }
 
+    /**
+     * @param string $id
+     *
+     * @return boolean|string
+     */
     final private function natlangApply($id, $p1 = FALSE, $p2 = FALSE, $p3 = FALSE, $p4 = FALSE, $p5 = FALSE, $p6 = FALSE)
     {
         $txt = $this->_lang[$id];

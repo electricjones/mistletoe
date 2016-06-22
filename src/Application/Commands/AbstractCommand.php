@@ -127,7 +127,7 @@ abstract class AbstractCommand extends Command
      * of a mistletoe config file.
      *
      * @param $path
-     * @return mixed
+     * @return TaskPlanner
      * @throws \Exception
      */
     private function loadTaskPlanner($path)
