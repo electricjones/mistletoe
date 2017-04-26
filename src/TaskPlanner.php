@@ -44,6 +44,7 @@ class TaskPlanner
      */
     protected $testing = false;
 
+
     /**
      * Begin a new Task Chain
      * @param string|\Closure $task
@@ -560,7 +561,7 @@ class TaskPlanner
         $this->getCurrentTask()->setTask(
             ($body) ? $body : $task
         );
-            }
+    }
 
     /**
      * @param string $task
