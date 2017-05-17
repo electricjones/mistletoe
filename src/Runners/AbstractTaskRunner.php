@@ -53,9 +53,9 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
      */
     public function setCurrentTime($currentTime)
     {
-        if (!is_string($currentTime)) {
-            throw new \Exception("Current time must be a string");
-        }
+        //if (!is_string($currentTime)) {
+        //    throw new \Exception("Current time must be a string");
+        //}
 
         $this->currentTime = $currentTime;
         return $this;
