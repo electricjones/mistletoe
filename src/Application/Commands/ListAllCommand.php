@@ -1,5 +1,6 @@
 <?php
-namespace Mistletoe\Application\Commands;
+
+namespace ElectricJones\Mistletoe\Application\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

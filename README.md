@@ -1,3 +1,7 @@
+- todo: PHP 8.1
+- todo: Parse Annotated Classes
+- Separate processes
+
 # Mistletoe (PHP Cron Tasks)
 
 [![Latest Version](https://img.shields.io/github/release/chrismichaels84/mistletoe.svg?style=flat-square)](https://github.com/chrismichaels84/mistletoe/releases)
@@ -25,15 +29,16 @@ $planner = (new Mistletoe\TaskPlanner())
 In your crontasks, simply add `/path/to/bin/mt run:due` to execute how ever often you want.
 
 ### Includes Full Support For
-  * Simplify ALL cronjobs into a single job
-  * Environment detection and limiting (only run certain tasks in production)
-  * Tasks may be console commands, classes, or callables
-  * Fluent cron schedule builder
-  * An included TaskRunner
-  * Easy to create custom task runners
-  * CLI application
-  * Fully extensible
-  * PSR and PHP The Right Way Compliant
+
+* Simplify ALL cronjobs into a single job
+* Environment detection and limiting (only run certain tasks in production)
+* Tasks may be console commands, classes, or callables
+* Fluent cron schedule builder
+* An included TaskRunner
+* Easy to create custom task runners
+* CLI application
+* Fully extensible
+* PSR and PHP The Right Way Compliant
 
 ## Install
 You can use mistletoe in one of three ways:
@@ -41,9 +46,10 @@ You can use mistletoe in one of three ways:
 ### As a Phar (Best)
 
 You may download a ready-to-use version of Box as a Phar:
-   * Go to https://github.com/chrismichaels84/mistletoe/releases/latest
-   * Download the `mt` under Downloads
-   * Put it somewhere you'll remember it and/or add it to your path!
+
+* Go to https://github.com/chrismichaels84/mistletoe/releases/latest
+* Download the `mt` under Downloads
+* Put it somewhere you'll remember it and/or add it to your path!
 
 ### As a Global Composer Install (Better)
 
@@ -93,18 +99,20 @@ in the current working directory. You may specify a relative or absolute path to
 that returns a TaskPlanner instance.
 
 For example:
-  * `mt list:all` - assumes `mistletoe.php` is in this dir
-  * `mt list:all /full/path/to/file.php` - will use the full path
-  * `mt list:all ../to/file.php` - will use the relative path
+
+* `mt list:all` - assumes `mistletoe.php` is in this dir
+* `mt list:all /full/path/to/file.php` - will use the full path
+* `mt list:all ../to/file.php` - will use the relative path
 
 #### Commands
-  * `list:all` - Lists ALL the commands that are register with info about each
-  * `list:due` - Lists only the command that are due at that moment with info about each
-  * `run:due` - Runs whatever commands are due at that moment
-  * `run:all` - Will force run EVERY command registered
-  * `run:task Full/Class/Path` - Will run only that one task, due or not
-  * `help` - Shows this guide
-  
+
+* `list:all` - Lists ALL the commands that are register with info about each
+* `list:due` - Lists only the command that are due at that moment with info about each
+* `run:due` - Runs whatever commands are due at that moment
+* `run:all` - Will force run EVERY command registered
+* `run:task Full/Class/Path` - Will run only that one task, due or not
+* `help` - Shows this guide
+
 #### Options
 If you set the verbosity level to "verbose" or higher, it will print extra information.
 ```php

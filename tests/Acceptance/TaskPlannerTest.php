@@ -1,31 +1,31 @@
-<?php namespace Mistletoe\Test\Acceptance;
+<?php namespace ElectricJones\Mistletoe\Test\Acceptance;
 
-use Mistletoe\Test\ScenarioSetups;
+use ElectricJones\Mistletoe\Test\ScenarioSetups;
 
 class TaskPlannerTest extends ScenarioSetups
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        
+
         if (!file_exists($this->getTestDir() . '/temp/')) {
             mkdir($this->getTestDir() . '/temp/', 0744, true);
         }
         // Clean fixture
         $files = glob($this->getTestDir() . '/temp/*'); // get all file names
-        foreach($files as $file){ // iterate files
-            if(is_file($file)) {
+        foreach ($files as $file) { // iterate files
+            if (is_file($file)) {
                 unlink($file); // delete file
             }
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // Clean fixture
         $files = glob($this->getTestDir() . '/temp/*'); // get all file names
-        foreach($files as $file){ // iterate files
-            if(is_file($file)) {
+        foreach ($files as $file) { // iterate files
+            if (is_file($file)) {
                 unlink($file); // delete file
             }
         }
@@ -36,7 +36,7 @@ class TaskPlannerTest extends ScenarioSetups
     public function TestFullShabang()
     {
         /**
-         * @var \Mistletoe\TaskPlanner $planner
+         * @var \ElectricJones\Mistletoe\TaskPlanner $planner
          */
         $planner = $this->getFullScenario();
 

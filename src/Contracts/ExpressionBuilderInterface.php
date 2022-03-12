@@ -1,7 +1,9 @@
 <?php
-namespace Mistletoe\Contracts;
+
+namespace ElectricJones\Mistletoe\Contracts;
+
 use Cron\CronExpression;
-use Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\TaskBag;
 
 /**
  * Class ExpressionBuilderInterface

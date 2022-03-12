@@ -1,7 +1,8 @@
 <?php
-namespace Mistletoe;
+namespace ElectricJones\Mistletoe;
+
 use Cron\CronExpression;
-use Mistletoe\Contracts\ExpressionBuilderInterface;
+use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
 
 /**
  * Class ExpressionBuilder

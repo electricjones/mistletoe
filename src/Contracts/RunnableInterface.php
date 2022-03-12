@@ -1,5 +1,6 @@
 <?php
-namespace Mistletoe\Contracts;
+
+namespace ElectricJones\Mistletoe\Contracts;
 
 /**
  * Class RunnableInterface

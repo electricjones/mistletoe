@@ -1,22 +1,23 @@
-<?php namespace Mistletoe\Test;
+<?php namespace ElectricJones\Mistletoe\Test;
 
-use Mistletoe\Command;
-use Mistletoe\TaskPlanner;
-use Mistletoe\Test\Mocks\MockTask1;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\Command;
+use ElectricJones\Mistletoe\TaskPlanner;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask1;
+use PHPUnit\Framework\TestCase;
+
 
 /**
  * Class ScenarioSetups
  * @package system\Mistletoe
  */
-class ScenarioSetups extends PHPUnit_Framework_TestCase
+class ScenarioSetups extends TestCase
 {
     /**
      * @var string The mistletoe/tests director
      */
     protected $testDir;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testDir = __DIR__;
     }

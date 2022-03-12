@@ -1,12 +1,13 @@
-<?php namespace Mistletoe\Test\Unit;
+<?php namespace ElectricJones\Mistletoe\Test\Unit;
 
 /* The Getter and Setter methods are all tested in `TaskPlannerTest`. No need to duplicate */
-use Cron\CronExpression;
-use Mistletoe\TaskBag;
-use Mistletoe\Test\Mocks\MockExpressionBuilder;
-use PHPUnit_Framework_TestCase;
 
-class TaskBagTest extends PHPUnit_Framework_TestCase
+use Cron\CronExpression;
+use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Test\Mocks\MockExpressionBuilder;
+use PHPUnit\Framework\TestCase;
+
+class TaskBagTest extends TestCase
 {
     /** @test */
     public function TestConstructNewBagWithName()

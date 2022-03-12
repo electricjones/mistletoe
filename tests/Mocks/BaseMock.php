@@ -1,7 +1,7 @@
 <?php
-namespace Mistletoe\Test\Mocks;
+namespace ElectricJones\Mistletoe\Test\Mocks;
 
-use Mistletoe\Contracts\RunnableInterface;
+use ElectricJones\Mistletoe\Contracts\RunnableInterface;
 
 abstract class BaseMock implements RunnableInterface
 {

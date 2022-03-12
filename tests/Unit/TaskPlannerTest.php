@@ -1,10 +1,11 @@
-<?php namespace Mistletoe\Test\Unit;
+<?php namespace ElectricJones\Mistletoe\Test\Unit;
 
-use Mistletoe\TaskBag;
-use Mistletoe\TaskPlanner;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\TaskPlanner;
+use PHPUnit\Framework\TestCase;
 
-class TaskPlannerTest extends PHPUnit_Framework_TestCase
+
+class TaskPlannerTest extends TestCase
 {
     public function TestAddNewEmptyTaskBags()
     {

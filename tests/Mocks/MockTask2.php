@@ -1,5 +1,5 @@
 <?php
-namespace Mistletoe\Test\Mocks;
+namespace ElectricJones\Mistletoe\Test\Mocks;
 
 class MockTask2 extends BaseMock
 {

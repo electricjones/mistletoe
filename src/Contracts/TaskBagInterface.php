@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: michael
- * Date: 6/21/16
- * Time: 5:48 PM
- */
-namespace Mistletoe\Contracts;
+
+namespace ElectricJones\Mistletoe\Contracts;
 
 use Cron\CronExpression;
-use Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\TaskBag;
 
 
 /**

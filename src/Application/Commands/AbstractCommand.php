@@ -1,9 +1,10 @@
 <?php
-namespace Mistletoe\Application\Commands;
 
-use Mistletoe\CronSchedule;
-use Mistletoe\TaskBag;
-use Mistletoe\TaskPlanner;
+namespace ElectricJones\Mistletoe\Application\Commands;
+
+use ElectricJones\Mistletoe\CronSchedule;
+use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\TaskPlanner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -63,7 +64,7 @@ abstract class AbstractCommand extends Command
 
             // Followed By
             $row[] = implode(" -> ", array_map(function ($task) {
-                if ($task instanceof \Mistletoe\Command) {
+                if ($task instanceof \ElectricJones\Mistletoe\Command) {
                     return $task->getCommand();
                 } else {
                     return $task;

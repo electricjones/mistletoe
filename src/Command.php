@@ -1,4 +1,4 @@
-<?php namespace Mistletoe;
+<?php namespace ElectricJones\Mistletoe;
 
 /**
  * Class Command

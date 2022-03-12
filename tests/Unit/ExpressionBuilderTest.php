@@ -1,11 +1,12 @@
-<?php namespace Mistletoe\Test\Unit;
+<?php namespace ElectricJones\Mistletoe\Test\Unit;
 
 use Cron\CronExpression;
-use Mistletoe\ExpressionBuilder;
-use Mistletoe\TaskBag;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\ExpressionBuilder;
+use ElectricJones\Mistletoe\TaskBag;
+use PHPUnit\Framework\TestCase;
 
-class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
+
+class ExpressionBuilderTest extends TestCase
 {
     /** @test */
     public function TestBuildFromStringExpression()
@@ -18,7 +19,7 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
         $actual = $builder->buildFrom('2 2 * * *');
         $this->assertEquals(CronExpression::factory('2 2 * * *'), $actual, 'failed to build from second expression');
     }
-    
+
     /** @test */
     public function TestBuildsFromIntervalsOnly()
     {
@@ -29,11 +30,11 @@ class ExpressionBuilderTest extends PHPUnit_Framework_TestCase
             );
             $actual = $builder->build();
             $expected = CronExpression::factory($interval);
-            
+
             $this->assertEquals($expected, $actual, "failed to build from $interval");
         }
     }
-    
+
     /** @test */
     public function TestBuildsFromTime() // will be daily without any other parameters
     {

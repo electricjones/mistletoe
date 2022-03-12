@@ -1,4 +1,4 @@
-<?php namespace Mistletoe\Contracts;
+<?php namespace ElectricJones\Mistletoe\Contracts;
 
 
 /**

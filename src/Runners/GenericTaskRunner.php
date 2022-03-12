@@ -1,18 +1,18 @@
-<?php namespace Mistletoe\Runners;
-use Mistletoe\Command;
-use Mistletoe\Contracts\TaskRunnerInterface;
-use Mistletoe\Contracts\RunnableInterface;
-use Mistletoe\TaskBag;
+<?php namespace ElectricJones\Mistletoe\Runners;
+
+use ElectricJones\Mistletoe\Command;
+use ElectricJones\Mistletoe\Contracts\RunnableInterface;
+use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
+use ElectricJones\Mistletoe\TaskBag;
 
 /**
  * Class Generic
  * @package Mistletoe\Application\Commands
  */
-
 class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterface
 {
     /**
-     * 
+     *
      * This is NOT done in a try/catch block. This should be RUN inside a try/catch block!
      * @param array $tasks
      * @return mixed
@@ -30,7 +30,7 @@ class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterfac
             $processes[] = $task->getTask();
             $processes = array_merge($processes, $task->getFollowedBy());
         }
-        
+
         foreach ($processes as $process) {
             // Create a Process instance
             if (is_string($process) && class_exists($process)) {
@@ -45,12 +45,12 @@ class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterfac
                 exec($process->getCommand());
 
             } elseif ($process instanceof RunnableInterface) {
-                /** @var \Mistletoe\Contracts\RunnableInterface $obj */
+                /** @var RunnableInterface $obj */
                 $obj = new $process();
                 $obj->run();
             }
         }
-        
+
         return true;
     }
 }

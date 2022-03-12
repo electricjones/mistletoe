@@ -1,7 +1,8 @@
 <?php
-namespace Mistletoe;
-use Mistletoe\Contracts\TaskRunnerInterface;
-use Mistletoe\Runners\GenericTaskRunner;
+namespace ElectricJones\Mistletoe;
+
+use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
+use ElectricJones\Mistletoe\Runners\GenericTaskRunner;
 
 /**
  * Class TaskPlanner
@@ -25,7 +26,7 @@ class TaskPlanner
     const DEVELOPMENT_ENVIRONMENT = 'DEVELOPMENT';
 
     /**
-     * @var \Mistletoe\Contracts\TaskRunnerInterface
+     * @var TaskRunnerInterface
      */
     protected $taskRunner;
 

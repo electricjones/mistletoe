@@ -1,31 +1,32 @@
-<?php namespace Mistletoe\Test\Unit;
+<?php namespace ElectricJones\Mistletoe\Test\Unit;
 
 use Cron\CronExpression;
-use Mistletoe\Command;
-use Mistletoe\Runners\GenericTaskRunner as TaskRunner;
-use Mistletoe\TaskBag;
-use Mistletoe\Test\Mocks\MockTask1;
-use Mistletoe\Test\Mocks\MockTask2;
-use Mistletoe\Test\Mocks\MockTask3;
-use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\Command;
+use ElectricJones\Mistletoe\Runners\GenericTaskRunner as TaskRunner;
+use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask1;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask2;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask3;
+use PHPUnit\Framework\TestCase;
 
-class TaskRunnerTest extends PHPUnit_Framework_TestCase
+
+class TaskRunnerTest extends TestCase
 {
     protected $taskBags;
     protected $closureTask1;
     protected $closureTask2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->closureTask1 = new Command('sleep 12');
-        $this->closureTask2 = function() {};
+        $this->closureTask2 = function () {
+        };
 
         $this->taskBags = [
             MockTask1::class => new TaskBag([ // is due
-                'task' => MockTask1::class,
+                'task'           => MockTask1::class,
                 'cronExpression' => CronExpression::factory('30 12 1 1 *'),
-                'environments' => ['PRODUCTION']
+                'environments'   => ['PRODUCTION']
             ]),
 
             MockTask2::class => new TaskBag([
@@ -59,9 +60,6 @@ class TaskRunnerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return TaskRunner|PHPUnit_Framework_MockObject_MockObject
-     */
     protected function setupRunnerMock()
     {
         // Stub the execute tasks to return a list of build tasks ready for execution
@@ -123,7 +121,7 @@ class TaskRunnerTest extends PHPUnit_Framework_TestCase
 //            "failed to run correct executable tasks"
 //        );
 //    }
-    
+
 //    /** @test */
 //    public function TestLoadSpecificTask()
 //    {

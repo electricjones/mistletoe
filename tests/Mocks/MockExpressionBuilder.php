@@ -1,6 +1,6 @@
-<?php namespace Mistletoe\Test\Mocks;
+<?php namespace ElectricJones\Mistletoe\Test\Mocks;
 
-use Mistletoe\Contracts\ExpressionBuilderInterface;
+use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
 
 /**
  * Class MockExpressionBuilder
@@ -16,19 +16,19 @@ class MockExpressionBuilder implements ExpressionBuilderInterface
     }
 
     /**
-     * @param \Mistletoe\TaskBag $bag
+     * @param \ElectricJones\Mistletoe\TaskBag $bag
      * @return \Cron\CronExpression
      */
-    public function build(\Mistletoe\TaskBag $bag = null)
+    public function build(\ElectricJones\Mistletoe\TaskBag $bag = null)
     {
         return $this->testExpression;
     }
 
     /**
-     * @param \Mistletoe\TaskBag $bag
+     * @param \ElectricJones\Mistletoe\TaskBag $bag
      * @return $this
      */
-    public function setTaskBag(\Mistletoe\TaskBag $bag)
+    public function setTaskBag(\ElectricJones\Mistletoe\TaskBag $bag)
     {
         $this->bag = $bag;
         return $this;
@@ -44,7 +44,7 @@ class MockExpressionBuilder implements ExpressionBuilderInterface
     }
 
     /**
-     * @return \Mistletoe\TaskBag
+     * @return \ElectricJones\Mistletoe\TaskBag
      */
     public function getTaskBag()
     {

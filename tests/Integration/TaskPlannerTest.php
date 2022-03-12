@@ -1,7 +1,7 @@
-<?php namespace Mistletoe\Test\Integration;
+<?php namespace ElectricJones\Mistletoe\Test\Integration;
 
-use Mistletoe\TaskPlanner;
-use Mistletoe\Test\ScenarioSetups;
+use ElectricJones\Mistletoe\TaskPlanner;
+use ElectricJones\Mistletoe\Test\ScenarioSetups;
 
 class TaskPlanneTest extends ScenarioSetups
 {

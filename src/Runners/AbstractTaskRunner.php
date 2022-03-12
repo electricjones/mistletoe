@@ -1,7 +1,8 @@
 <?php
-namespace Mistletoe\Runners;
-use Mistletoe\Contracts\TaskRunnerInterface;
-use Mistletoe\TaskBag;
+namespace ElectricJones\Mistletoe\Runners;
+
+use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
+use ElectricJones\Mistletoe\TaskBag;
 
 /**
  * Class AbstractTaskRunner
