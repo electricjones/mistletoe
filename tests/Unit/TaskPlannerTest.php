@@ -1,5 +1,6 @@
 <?php namespace ElectricJones\Mistletoe\Test\Unit;
 
+use Cron\CronExpression;
 use ElectricJones\Mistletoe\TaskBag;
 use ElectricJones\Mistletoe\TaskPlanner;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,7 @@ class TaskPlannerTest extends TestCase
         $planner = new TaskPlanner();
         $planner->add('Task1')->schedule('1 1 1 * *');
 
-        $this->assertEquals(\Cron\CronExpression::factory('1 1 1 * *'), $planner->getTask('Task1')->getCronExpression(), "failed to schedule a single task");
+        $this->assertEquals(new CronExpression('1 1 1 * *'), $planner->getTask('Task1')->getCronExpression(), "failed to schedule a single task");
     }
 
     /** @test */
@@ -206,9 +207,9 @@ class TaskPlannerTest extends TestCase
             ->at('13:14');
 
         $expected = [
-            'SomeTask' => (new TaskBag('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
+            'SomeTask'    => (new TaskBag('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
             'AnotherTask' => (new TaskBag('AnotherTask'))->setInterval('@daily')->setTime('13:14')->addEnvironment('STAGING'),
-            'ThirdTask' => (new TaskBag('ThirdTask'))->setWeekday('6,0')->setMonth('2,4,6')->setTime('13:14')
+            'ThirdTask'   => (new TaskBag('ThirdTask'))->setWeekday('6,0')->setMonth('2,4,6')->setTime('13:14')
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), 'failed to create complex bags');

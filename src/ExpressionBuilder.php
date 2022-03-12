@@ -62,7 +62,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      */
     public function buildFrom($string): CronExpression
     {
-        return CronExpression::factory($string);
+        return new CronExpression($string);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php namespace ElectricJones\Mistletoe\Test\Acceptance;
 
 use ElectricJones\Mistletoe\Test\ScenarioSetups;
+use Exception;
 
 class TaskPlannerTest extends ScenarioSetups
 {
@@ -32,12 +33,11 @@ class TaskPlannerTest extends ScenarioSetups
         rmdir($this->getTestDir() . '/temp/');
     }
 
-    /** @test */
+    /** @test
+     * @throws Exception
+     */
     public function TestFullShabang()
     {
-        /**
-         * @var \ElectricJones\Mistletoe\TaskPlanner $planner
-         */
         $planner = $this->getFullScenario();
 
         $start_time = time();

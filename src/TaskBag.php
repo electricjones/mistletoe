@@ -368,7 +368,7 @@ class TaskBag implements TaskBagInterface
     {
         $this->cronExpression = ($cronExpression instanceof CronExpression)
             ? $cronExpression
-            : CronExpression::factory($cronExpression);
+            : new CronExpression($cronExpression);
 
         return $this;
     }

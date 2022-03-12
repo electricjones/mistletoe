@@ -83,13 +83,13 @@ class TaskBagTest extends TestCase
         // From a string expression
         $task = new TaskBag('Task');
         $task->setCronExpression('1 1 1 1 1');
-        $this->assertEquals(CronExpression::factory('1 1 1 1 1'), $task->getCronExpression(), 'failed to set cron expression from string');
+        $this->assertEquals(new CronExpression('1 1 1 1 1'), $task->getCronExpression(), 'failed to set cron expression from string');
 
         // From a CronExpression instance
         $task = new TaskBag('Task');
-        $expression = CronExpression::factory('1 2 3 4 5');
+        $expression = new CronExpression('1 2 3 4 5');
         $task->setCronExpression($expression);
-        $this->assertEquals(CronExpression::factory('1 2 3 4 5'), $task->getCronExpression(), 'failed to set cron expression from instance');
+        $this->assertEquals(new CronExpression('1 2 3 4 5'), $task->getCronExpression(), 'failed to set cron expression from instance');
 
     }
 
@@ -101,7 +101,7 @@ class TaskBagTest extends TestCase
         $task = new TaskBag('Task');
         $task->setExpressionBuilder(new MockExpressionBuilder('1 * * * *')); // for testing
 
-        $this->assertEquals(CronExpression::factory('1 * * * *'), $task->getCronExpression(), 'failed to build an expression with the builder');
+        $this->assertEquals(new CronExpression('1 * * * *'), $task->getCronExpression(), 'failed to build an expression with the builder');
     }
 
     // Passed to CronExpression, not tested here: isDue(), getNextRunDate(), getPreviousRunDate()

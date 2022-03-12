@@ -25,37 +25,37 @@ class TaskRunnerTest extends TestCase
         $this->taskBags = [
             MockTask1::class => new TaskBag([ // is due
                 'task'           => MockTask1::class,
-                'cronExpression' => CronExpression::factory('30 12 1 1 *'),
+                'cronExpression' => new CronExpression('30 12 1 1 *'),
                 'environments'   => ['PRODUCTION']
             ]),
 
             MockTask2::class => new TaskBag([
-                'task' => MockTask2::class,
-                'cronExpression' => CronExpression::factory('45 * * * *'),
-                'environments' => ['PRODUCTION', 'DEVELOPMENT']
+                'task'           => MockTask2::class,
+                'cronExpression' => new CronExpression('45 * * * *'),
+                'environments'   => ['PRODUCTION', 'DEVELOPMENT']
             ]),
 
             MockTask3::class => new TaskBag([  // is due, on all environments by default
                 'task' => MockTask3::class,
-                'cronExpression' => CronExpression::factory('30 * * * *')
+                'cronExpression' => new CronExpression('30 * * * *')
             ]),
 
             // @todo: closure tasks do not work with FlexTaskRunner yet, but Command()s do
             '_task0' => new TaskBag([ // is due
-                'task' => $this->closureTask1,
-                'cronExpression' => CronExpression::factory('1,30 4,8,12 * 1,6,12 *'),
-                'environments' => ['PRODUCTION']
+                'task'           => $this->closureTask1,
+                'cronExpression' => new CronExpression('1,30 4,8,12 * 1,6,12 *'),
+                'environments'   => ['PRODUCTION']
             ]),
 
             '_task1' => new TaskBag([
                 'task' => $this->closureTask2,
-                'cronExpression' => CronExpression::factory('1,30 4,8,12 * 2,6,12 *')
+                'cronExpression' => new CronExpression('1,30 4,8,12 * 2,6,12 *')
             ]),
 
             '_task2' => new TaskBag([
-                'task' => $this->closureTask2,
-                'cronExpression' => CronExpression::factory('30 12 1 1 *'),
-                'environments' => ['DEVELOPMENT']
+                'task'           => $this->closureTask2,
+                'cronExpression' => new CronExpression('30 12 1 1 *'),
+                'environments'   => ['DEVELOPMENT']
             ]),
         ];
     }

@@ -13,11 +13,11 @@ class ExpressionBuilderTest extends TestCase
     {
         $builder = new ExpressionBuilder();
         $actual = $builder->buildFrom('1 1 1 1 1');
-        $this->assertEquals(CronExpression::factory('1 1 1 1 1'), $actual, 'failed to build from first expression');
+        $this->assertEquals(new CronExpression('1 1 1 1 1'), $actual, 'failed to build from first expression');
 
         $builder = new ExpressionBuilder();
         $actual = $builder->buildFrom('2 2 * * *');
-        $this->assertEquals(CronExpression::factory('2 2 * * *'), $actual, 'failed to build from second expression');
+        $this->assertEquals(new CronExpression('2 2 * * *'), $actual, 'failed to build from second expression');
     }
 
     /** @test */
@@ -29,7 +29,7 @@ class ExpressionBuilderTest extends TestCase
                 (new TaskBag('Task'))->setInterval($interval)
             );
             $actual = $builder->build();
-            $expected = CronExpression::factory($interval);
+            $expected = new CronExpression($interval);
 
             $this->assertEquals($expected, $actual, "failed to build from $interval");
         }
@@ -49,7 +49,7 @@ class ExpressionBuilderTest extends TestCase
                 (new TaskBag('Task'))->setTime($time)
             );
             $actual = $builder->build();
-            $expected = CronExpression::factory($expression);
+            $expected = new CronExpression($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $time");
         }
@@ -69,7 +69,7 @@ class ExpressionBuilderTest extends TestCase
                 (new TaskBag('Task'))->setDate($date)
             );
             $actual = $builder->build();
-            $expected = CronExpression::factory($expression);
+            $expected = new CronExpression($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $date");
         }
@@ -91,7 +91,7 @@ class ExpressionBuilderTest extends TestCase
                 (new TaskBag('Task'))->setDate($time[0])->setTime($time[1])
             );
             $actual = $builder->build();
-            $expected = CronExpression::factory($expression);
+            $expected = new CronExpression($expression);
 
             $this->assertEquals($expected, $actual, "failed to build from $date");
         }
@@ -111,7 +111,7 @@ class ExpressionBuilderTest extends TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = CronExpression::factory('20 7 * * *');
+        $expected = new CronExpression('20 7 * * *');
 
         $this->assertEquals($expected, $actual, "failed to build from the first scenario");
 
@@ -127,7 +127,7 @@ class ExpressionBuilderTest extends TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = CronExpression::factory('0 12 * 6 4,6,0');
+        $expected = new CronExpression('0 12 * 6 4,6,0');
 
         $this->assertEquals($expected, $actual, "failed to build from the weekday scenario");
 
@@ -144,7 +144,7 @@ class ExpressionBuilderTest extends TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = CronExpression::factory('30 15 12 * *');
+        $expected = new CronExpression('30 15 12 * *');
 
         $this->assertEquals($expected, $actual, "failed to build from the second scenario");
 
@@ -162,7 +162,7 @@ class ExpressionBuilderTest extends TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = CronExpression::factory('24 0 1 7 *');
+        $expected = new CronExpression('24 0 1 7 *');
 
         $this->assertEquals($expected, $actual, "failed to build from the third scenario");
 
@@ -178,7 +178,7 @@ class ExpressionBuilderTest extends TestCase
             ])
         );
         $actual = $builder->build();
-        $expected = CronExpression::factory('30,59 1,4,8 2,4,9 1,3,9 *');
+        $expected = new CronExpression('30,59 1,4,8 2,4,9 1,3,9 *');
 
         $this->assertEquals($expected, $actual, "failed to build from the complex scenario");
     }
