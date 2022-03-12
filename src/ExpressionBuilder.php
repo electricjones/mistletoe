@@ -11,14 +11,14 @@ use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
 class ExpressionBuilder implements ExpressionBuilderInterface
 {
     /** @var TaskBag */
-    protected $bag;
+    protected TaskBag $bag;
 
     /**
      * Builds an expression from the TaskBag
      * @param TaskBag|null $bag
      * @return CronExpression
      */
-    public function build(TaskBag $bag = null)
+    public function build(TaskBag $bag = null): CronExpression
     {
         if ($bag) {
             $this->setTaskBag($bag);
@@ -60,7 +60,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      * @param null|string $string
      * @return CronExpression
      */
-    public function buildFrom($string)
+    public function buildFrom($string): CronExpression
     {
         return CronExpression::factory($string);
     }
@@ -70,7 +70,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      * @param TaskBag $bag
      * @return $this
      */
-    public function setTaskBag(TaskBag $bag)
+    public function setTaskBag(TaskBag $bag): static
     {
         $this->bag = $bag;
         return $this;
@@ -79,7 +79,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
     /**
      * @return TaskBag
      */
-    public function getTaskBag()
+    public function getTaskBag(): TaskBag
     {
         return $this->bag;
     }
@@ -89,13 +89,13 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      * @param TaskBag $bag
      * @return bool
      */
-    protected function onlyIntervalIsSet(TaskBag $bag)
+    protected function onlyIntervalIsSet(TaskBag $bag): bool
     {
         return $bag->getInterval() !== null
-        && $bag->getMonth() === null
-        && $bag->getDay() === null
-        && $bag->getMinute() === null
-        && $bag->getHour() === null;
+            && $bag->getMonth() === null
+            && $bag->getDay() === null
+            && $bag->getMinute() === null
+            && $bag->getHour() === null;
     }
 
     /**
@@ -103,13 +103,13 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      * @param $value
      * @return string
      */
-    protected function toPart($value)
+    protected function toPart($value): string
     {
         if ($value === 0) {
             return '0';
         }
 
-        return (string) $value;
+        return (string)$value;
     }
 
     /**
@@ -117,9 +117,9 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      * @param string $part
      * @return string
      */
-    protected function getPartWithDefault($part)
+    protected function getPartWithDefault(string $part): string
     {
-        $value = $this->bag->{'get'.ucfirst($part)}();
+        $value = $this->bag->{'get' . ucfirst($part)}();
         if (!is_null($value)) {
             return $this->toPart($value);
         } else {

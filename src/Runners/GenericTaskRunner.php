@@ -15,9 +15,9 @@ class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterfac
      *
      * This is NOT done in a try/catch block. This should be RUN inside a try/catch block!
      * @param array $tasks
-     * @return mixed
+     * @return array|bool
      */
-    protected function executeTasks(array $tasks)
+    protected function executeTasks(array $tasks): array|bool
     {
         if ($this->testing) {
             return $tasks;

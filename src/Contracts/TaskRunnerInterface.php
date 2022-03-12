@@ -1,6 +1,9 @@
 <?php namespace ElectricJones\Mistletoe\Contracts;
 
 
+use DateTime;
+use Exception;
+
 /**
  * Class TaskRunner
  * @package Mistletoe
@@ -10,63 +13,63 @@ interface TaskRunnerInterface
     /**
      * @return mixed
      */
-    public function getCurrentTime();
+    public function getCurrentTime(): mixed;
 
     /**
-     * @param string|\DateTime $currentTime
+     * @param DateTime|string $currentTime
      * @return $this
      */
-    public function setCurrentTime($currentTime);
+    public function setCurrentTime(DateTime|string $currentTime): static;
 
     /**
      * @return string
      */
-    public function getCurrentEnvironment();
+    public function getCurrentEnvironment(): string;
 
     /**
      * @param string $currentEnvironment
      * @return $this
      */
-    public function setCurrentEnvironment($currentEnvironment);
+    public function setCurrentEnvironment(string $currentEnvironment): static;
 
     /**
      * Returns an array of currently due tasks
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getDueTasks();
+    public function getDueTasks(): array;
 
     /**
      * Force run every registered task
      * @return bool
      */
-    public function runAllTasks();
+    public function runAllTasks(): bool;
 
     /**
      * Run the tasks that are due right now
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    public function runDueTasks();
+    public function runDueTasks(): bool;
 
     /**
      * Run a specific task
      * @param $task
      * @return bool
      */
-    public function runTask($task);
+    public function runTask($task): bool;
 
     /**
      * Run multiple specific tasks
      * @param array $tasks
      * @return bool
      */
-    public function runTasks(array $tasks);
+    public function runTasks(array $tasks): bool;
 
     /**
      * In testing mode, we return the executed command strings, instead of executing them
      * @param bool $switch
      * @return mixed
      */
-    public function flagForTesting($switch = false);
+    public function flagForTesting(bool $switch = false): mixed;
 }

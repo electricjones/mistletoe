@@ -6,7 +6,7 @@
  */
 class Command
 {
-    private $command;
+    private mixed $command;
 
     public function __construct($command)
     {
@@ -17,7 +17,7 @@ class Command
     /**
      * @return mixed
      */
-    public function getCommand()
+    public function getCommand(): mixed
     {
         return $this->command;
     }
@@ -25,7 +25,7 @@ class Command
     /**
      * @param mixed $command
      */
-    public function setCommand($command)
+    public function setCommand(mixed $command)
     {
         $this->command = $command;
     }

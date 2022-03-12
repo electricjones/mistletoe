@@ -5,6 +5,7 @@ namespace ElectricJones\Mistletoe\Application\Commands;
 use ElectricJones\Mistletoe\CronSchedule;
 use ElectricJones\Mistletoe\TaskBag;
 use ElectricJones\Mistletoe\TaskPlanner;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,8 +23,9 @@ abstract class AbstractCommand extends Command
      * @param OutputInterface $output
      * @param $tasks
      * @return Table
+     * @throws Exception
      */
-    protected function listTasks(OutputInterface $output, $tasks)
+    protected function listTasks(OutputInterface $output, $tasks): Table
     {
         $rows = [];
 
@@ -95,9 +97,9 @@ abstract class AbstractCommand extends Command
     /**
      * @param string|null $path
      * @return TaskPlanner
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getTaskPlanner($path = null)
+    public function getTaskPlanner(string $path = null): TaskPlanner
     {
         // Return a cached instance
         if ($this->taskPlanner) {
@@ -129,20 +131,20 @@ abstract class AbstractCommand extends Command
      *
      * @param $path
      * @return TaskPlanner
-     * @throws \Exception
+     * @throws Exception
      */
-    private function loadTaskPlanner($path)
+    private function loadTaskPlanner($path): TaskPlanner
     {
         if (file_exists($path)) {
             $planner = include($path);
 
             if (!$planner instanceof TaskPlanner) {
-                throw new \Exception("Config file $path did not return a valid TaskPlanner.");
+                throw new Exception("Config file $path did not return a valid TaskPlanner.");
             }
 
             return $planner;
         }
 
-        throw new \Exception("Mistletoe config file: {$path} not found.");
+        throw new Exception("Mistletoe config file: {$path} not found.");
     }
 }

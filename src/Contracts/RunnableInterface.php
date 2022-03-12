@@ -8,5 +8,6 @@ namespace ElectricJones\Mistletoe\Contracts;
  */
 interface RunnableInterface
 {
-    public function run();
+    // @todo: any callable
+    public function run(): void;
 }

@@ -1,6 +1,7 @@
 - todo: PHP 8.1
 - todo: Parse Annotated Classes
 - Separate processes
+- Tests
 
 # Mistletoe (PHP Cron Tasks)
 

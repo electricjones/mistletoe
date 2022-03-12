@@ -16,25 +16,25 @@ interface ExpressionBuilderInterface
      * @param TaskBag|null $bag
      * @return CronExpression
      */
-    public function build(TaskBag $bag = null);
+    public function build(TaskBag $bag = null): CronExpression;
 
     /**
      * Builds an expression from the string
      * @param $string
      * @return CronExpression
      */
-    public function buildFrom($string);
+    public function buildFrom($string): CronExpression;
 
     /**
      * Sets TaskBag
      * @param TaskBag $bag
      * @return $this
      */
-    public function setTaskBag(TaskBag $bag);
+    public function setTaskBag(TaskBag $bag): static;
 
     /**
      * Returns TaskBag
      * @return TaskBag
      */
-    public function getTaskBag();
+    public function getTaskBag(): TaskBag;
 }
