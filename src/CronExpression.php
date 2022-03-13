@@ -40,8 +40,8 @@ class CronExpression extends BaseCronExpression
         /* Are we dealing with outside scenarios? */
         // Are we setting a day and month without a time?
         if (
-            ($task->getDay() && $task->getMonth()
-                && (!$task->getHour() && !$task->getMinute()))
+            ($task->getDays() && $task->getMonths()
+                && (!$task->getHours() && !$task->getMinutes()))
         ) {
             // Yes. We don't want it to run every minute!
             $parts[static::MINUTE_KEY] = '0';
@@ -59,10 +59,10 @@ class CronExpression extends BaseCronExpression
     static private function onlyIntervalIsSet(Task $task): bool
     {
         return $task->getInterval() !== null
-            && $task->getMonth() === null
-            && $task->getDay() === null
-            && $task->getMinute() === null
-            && $task->getHour() === null;
+            && $task->getMonths() === null
+            && $task->getDays() === null
+            && $task->getMinutes() === null
+            && $task->getHours() === null;
     }
 
     /**

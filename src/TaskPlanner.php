@@ -140,13 +140,13 @@ class TaskPlanner
 
     public function everyXHours($hrs): static
     {
-        $this->getCurrentTask()->setHour("*/{$hrs}");
+        $this->getCurrentTask()->setHours("*/{$hrs}");
         return $this;
     }
 
     public function everyXMinutes($mins): static
     {
-        $this->getCurrentTask()->setMinute("*/{$mins}");
+        $this->getCurrentTask()->setMinutes("*/{$mins}");
         return $this;
     }
 
