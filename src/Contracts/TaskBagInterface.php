@@ -3,6 +3,7 @@
 namespace ElectricJones\Mistletoe\Contracts;
 
 use Cron\CronExpression;
+use ElectricJones\Mistletoe\ExpressionBuilder;
 use ElectricJones\Mistletoe\TaskBag;
 
 
@@ -192,10 +193,10 @@ interface TaskBagInterface
     public function getCronExpression(): CronExpression;
 
     /**
-     * @param ExpressionBuilderInterface $expressionBuilder
+     * @param ExpressionBuilder $expressionBuilder
      * @return void
      */
-    public function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder);
+    public function setExpressionBuilder(ExpressionBuilder $expressionBuilder);
 
     /**
      * @param string $currentTime

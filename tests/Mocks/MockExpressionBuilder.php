@@ -1,13 +1,15 @@
 <?php namespace ElectricJones\Mistletoe\Test\Mocks;
 
-use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
+use Cron\CronExpression;
+use ElectricJones\Mistletoe\ExpressionBuilder;
+use ElectricJones\Mistletoe\TaskBag;
 
 /**
  * Class MockExpressionBuilder
  */
-class MockExpressionBuilder implements ExpressionBuilderInterface
+class MockExpressionBuilder extends ExpressionBuilder
 {
-    protected $bag;
+    protected TaskBag $bag;
     protected $testExpression;
 
     public function __construct($testExpression)
@@ -16,19 +18,19 @@ class MockExpressionBuilder implements ExpressionBuilderInterface
     }
 
     /**
-     * @param \ElectricJones\Mistletoe\TaskBag $bag
-     * @return \Cron\CronExpression
+     * @param TaskBag|null $bag
+     * @return CronExpression
      */
-    public function build(\ElectricJones\Mistletoe\TaskBag $bag = null)
+    public function build(TaskBag $bag = null): CronExpression
     {
         return $this->testExpression;
     }
 
     /**
-     * @param \ElectricJones\Mistletoe\TaskBag $bag
+     * @param TaskBag $bag
      * @return $this
      */
-    public function setTaskBag(\ElectricJones\Mistletoe\TaskBag $bag)
+    public function setTaskBag(TaskBag $bag): static
     {
         $this->bag = $bag;
         return $this;
@@ -36,17 +38,17 @@ class MockExpressionBuilder implements ExpressionBuilderInterface
 
     /**
      * @param $string
-     * @return \Cron\CronExpression
+     * @return CronExpression
      */
-    public function buildFrom($string)
+    public function buildFrom($string): CronExpression
     {
         // Not needed
     }
 
     /**
-     * @return \ElectricJones\Mistletoe\TaskBag
+     * @return TaskBag
      */
-    public function getTaskBag()
+    public function getTaskBag(): TaskBag
     {
         //
     }

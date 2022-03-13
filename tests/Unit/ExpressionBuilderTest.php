@@ -3,6 +3,7 @@
 use Cron\CronExpression;
 use ElectricJones\Mistletoe\ExpressionBuilder;
 use ElectricJones\Mistletoe\TaskBag;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 
@@ -35,7 +36,9 @@ class ExpressionBuilderTest extends TestCase
         }
     }
 
-    /** @test */
+    /** @test
+     * @throws Exception
+     */
     public function TestBuildsFromTime() // will be daily without any other parameters
     {
         $times = [
@@ -75,13 +78,15 @@ class ExpressionBuilderTest extends TestCase
         }
     }
 
-    /** @test */
+    /** @test
+     * @throws Exception
+     */
     public function TestBuildsFromDatesWithSetTimes()
     {
         $dates = [
             //date time -- just for testing purposes!
             '11/30 12:12' => '12 12 30 11 *',
-            '6/15 19:22' => '22 19 15 6 *'
+            '6/15 19:22'  => '22 19 15 6 *'
         ];
 
         foreach ($dates as $date => $expression) {

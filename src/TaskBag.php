@@ -2,7 +2,6 @@
 namespace ElectricJones\Mistletoe;
 
 use Cron\CronExpression;
-use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
 use ElectricJones\Mistletoe\Contracts\TaskBagInterface;
 use Exception;
 
@@ -44,8 +43,8 @@ class TaskBag implements TaskBagInterface
     protected string|int|array|null $weekday = null;
 
     /* Dependencies */
-    /** @var ExpressionBuilderInterface */
-    protected ExpressionBuilderInterface $expressionBuilder;
+    /** @var ExpressionBuilder */
+    protected ExpressionBuilder $expressionBuilder;
 
 
     /**
@@ -393,19 +392,19 @@ class TaskBag implements TaskBagInterface
     }
 
     /**
-     * @param ExpressionBuilderInterface $expressionBuilder
+     * @param ExpressionBuilder $expressionBuilder
      */
-    public function setExpressionBuilder(ExpressionBuilderInterface $expressionBuilder)
+    public function setExpressionBuilder(ExpressionBuilder $expressionBuilder)
     {
         $this->expressionBuilder = $expressionBuilder;
     }
 
     /**
-     * @return ExpressionBuilder|ExpressionBuilderInterface
+     * @return ExpressionBuilder|ExpressionBuilder
      */
     protected function getExpressionBuilder()
     {
-        return ($this->expressionBuilder instanceof ExpressionBuilderInterface) ? $this->expressionBuilder : new ExpressionBuilder();
+        return ($this->expressionBuilder instanceof ExpressionBuilder) ? $this->expressionBuilder : new ExpressionBuilder();
     }
 
 

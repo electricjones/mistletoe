@@ -2,13 +2,12 @@
 namespace ElectricJones\Mistletoe;
 
 use Cron\CronExpression;
-use ElectricJones\Mistletoe\Contracts\ExpressionBuilderInterface;
 
 /**
  * Class ExpressionBuilder
  * @package Mistletoe
  */
-class ExpressionBuilder implements ExpressionBuilderInterface
+class ExpressionBuilder
 {
     /** @var TaskBag */
     protected TaskBag $bag;
