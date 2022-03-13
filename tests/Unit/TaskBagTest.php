@@ -3,7 +3,7 @@
 /* The Getter and Setter methods are all tested in `TaskPlannerTest`. No need to duplicate */
 
 use Cron\CronExpression;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use ElectricJones\Mistletoe\Test\Mocks\MockExpressionBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestConstructNewBagWithName()
     {
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $this->assertEquals('Task', $task->getTask(), 'failed to set task name');
     }
 
@@ -20,7 +20,7 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestAddMonth()
     {
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->addMonth(1)->addMonth(2)->addMonth(3);
 
         $this->assertEquals('1,2,3', $task->getMonth(), 'failed to append months');
@@ -29,7 +29,7 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestAddDay()
     {
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->addDay(1)->addDay(2)->addDay(3);
 
         $this->assertEquals('1,2,3', $task->getDay(), 'failed to append day');
@@ -38,7 +38,7 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestAddHour()
     {
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->addHour(1)->addHour(2)->addHour(3);
 
         $this->assertEquals('1,2,3', $task->getHour(), 'failed to append hours');
@@ -47,7 +47,7 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestAddMintue()
     {
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->addMinute(1)->addMinute(2)->addMinute(3);
 
         $this->assertEquals('1,2,3', $task->getMinute(), 'failed to append minutes');
@@ -56,15 +56,15 @@ class TaskBagTest extends TestCase
     /** @test */
     public function TestConstructNewBagWithParameters()
     {
-        $task = new TaskBag([
-            'task' => 'name',
+        $task = new Task([
+            'task'         => 'name',
             'environments' => ['env'],
-            'followedBy' => ['one', 'two'],
-            'interval' => 'int',
-            'hour' => 'hour',
-            'minute' => 'minute',
-            'month' => 'month',
-            'day' => 'day'
+            'followedBy'   => ['one', 'two'],
+            'interval'     => 'int',
+            'hour'         => 'hour',
+            'minute'       => 'minute',
+            'month'        => 'month',
+            'day'          => 'day'
         ]);
 
         $this->assertEquals('name', $task->getTask(), 'failed to set task name');
@@ -81,12 +81,12 @@ class TaskBagTest extends TestCase
     public function TestSetCronExpression()
     {
         // From a string expression
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->setCronExpression('1 1 1 1 1');
         $this->assertEquals(new CronExpression('1 1 1 1 1'), $task->getCronExpression(), 'failed to set cron expression from string');
 
         // From a CronExpression instance
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $expression = new CronExpression('1 2 3 4 5');
         $task->setCronExpression($expression);
         $this->assertEquals(new CronExpression('1 2 3 4 5'), $task->getCronExpression(), 'failed to set cron expression from instance');
@@ -98,7 +98,7 @@ class TaskBagTest extends TestCase
     public function TestGetCronExpression()
     {
         // Just make sure it passes the bag through expression builder
-        $task = new TaskBag('Task');
+        $task = new Task('Task');
         $task->setExpressionBuilder(new MockExpressionBuilder('1 * * * *')); // for testing
 
         $this->assertEquals(new CronExpression('1 * * * *'), $task->getCronExpression(), 'failed to build an expression with the builder');

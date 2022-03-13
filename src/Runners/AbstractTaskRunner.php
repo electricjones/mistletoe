@@ -3,7 +3,7 @@ namespace ElectricJones\Mistletoe\Runners;
 
 use DateTime;
 use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use Exception;
 
 /**
@@ -91,7 +91,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     {
         $dueTasks = [];
         foreach ($this->taskBags as $taskName => $task) {
-            if (!$task instanceof TaskBag) {
+            if (!$task instanceof Task) {
                 throw new Exception("Tasks must be instances of TaskBag");
             }
 

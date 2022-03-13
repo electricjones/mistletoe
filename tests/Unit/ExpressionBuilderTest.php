@@ -2,7 +2,7 @@
 
 use Cron\CronExpression;
 use ElectricJones\Mistletoe\ExpressionBuilder;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +27,7 @@ class ExpressionBuilderTest extends TestCase
         foreach (['@yearly', '@annually', '@monthly', '@weekly', '@daily'] as $interval) {
             $builder = new ExpressionBuilder();
             $builder->setTaskBag(
-                (new TaskBag('Task'))->setInterval($interval)
+                (new Task('Task'))->setInterval($interval)
             );
             $actual = $builder->build();
             $expected = new CronExpression($interval);
@@ -49,7 +49,7 @@ class ExpressionBuilderTest extends TestCase
         foreach ($times as $time => $expression) {
             $builder = new ExpressionBuilder();
             $builder->setTaskBag(
-                (new TaskBag('Task'))->setTime($time)
+                (new Task('Task'))->setTime($time)
             );
             $actual = $builder->build();
             $expected = new CronExpression($expression);
@@ -69,7 +69,7 @@ class ExpressionBuilderTest extends TestCase
         foreach ($dates as $date => $expression) {
             $builder = new ExpressionBuilder();
             $builder->setTaskBag(
-                (new TaskBag('Task'))->setDate($date)
+                (new Task('Task'))->setDate($date)
             );
             $actual = $builder->build();
             $expected = new CronExpression($expression);
@@ -93,7 +93,7 @@ class ExpressionBuilderTest extends TestCase
             $builder = new ExpressionBuilder();
             $time = explode(' ', $date);
             $builder->setTaskBag(
-                (new TaskBag('Task'))->setDate($time[0])->setTime($time[1])
+                (new Task('Task'))->setDate($time[0])->setTime($time[1])
             );
             $actual = $builder->build();
             $expected = new CronExpression($expression);
@@ -108,11 +108,11 @@ class ExpressionBuilderTest extends TestCase
         /* Scenario: Every day at 7:20 */
         $builder = new ExpressionBuilder();
         $builder->setTaskBag(
-            new TaskBag([
-                'task' => 'Task',
+            new Task([
+                'task'     => 'Task',
                 'interval' => '@daily',
-                'hour' => 7,
-                'minute' => 20
+                'hour'     => 7,
+                'minute'   => 20
             ])
         );
         $actual = $builder->build();
@@ -123,12 +123,12 @@ class ExpressionBuilderTest extends TestCase
         /* Scenario: Every Thursday, Sat, and Sun in June at noon */
         $builder = new ExpressionBuilder();
         $builder->setTaskBag(
-            new TaskBag([
-                'task' => 'Task',
-                'hour' => 12,
-                'minute' => 00,
+            new Task([
+                'task'    => 'Task',
+                'hour'    => 12,
+                'minute'  => 00,
                 'weekday' => '4,6,0',
-                'month' => 6
+                'month'   => 6
             ])
         );
         $actual = $builder->build();
@@ -140,12 +140,12 @@ class ExpressionBuilderTest extends TestCase
         /* Scenario: on the 15 on ever month at 15:30 */
         $builder = new ExpressionBuilder();
         $builder->setTaskBag(
-            new TaskBag([
-                'task' => 'TaskTwo',
+            new Task([
+                'task'     => 'TaskTwo',
                 'interval' => '@monthly',
-                'hour' => '15',
-                'minute' => 30,
-                'day' => 12
+                'hour'     => '15',
+                'minute'   => 30,
+                'day'      => 12
             ])
         );
         $actual = $builder->build();
@@ -157,13 +157,13 @@ class ExpressionBuilderTest extends TestCase
         /* Scenario: Malformed request */
         $builder = new ExpressionBuilder();
         $builder->setTaskBag(
-            new TaskBag([
-                'task' => 'TaskThree',
+            new Task([
+                'task'     => 'TaskThree',
                 'interval' => '@monthly', // this should be ignored...
-                'hour' => 0,
-                'minute' => 24,
-                'day' => 1,
-                'month' => 7 // ... because of this
+                'hour'     => 0,
+                'minute'   => 24,
+                'day'      => 1,
+                'month'    => 7 // ... because of this
             ])
         );
         $actual = $builder->build();
@@ -174,12 +174,12 @@ class ExpressionBuilderTest extends TestCase
         /* Complex: “At every 30 and 59th minute past the 1, 4 and 8th hour on the 2, 4, 9 and 10th in Jan, Mar and Sep.” */
         $builder = new ExpressionBuilder();
         $builder->setTaskBag(
-            new TaskBag([
-                'task' => 'TaskThree',
+            new Task([
+                'task'   => 'TaskThree',
                 'minute' => '30,59',
-                'hour' => '1,4,8',
-                'day' => '2,4,9',
-                'month' => '1,3,9'
+                'hour'   => '1,4,8',
+                'day'    => '2,4,9',
+                'month'  => '1,3,9'
             ])
         );
         $actual = $builder->build();

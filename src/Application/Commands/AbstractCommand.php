@@ -3,7 +3,7 @@
 namespace ElectricJones\Mistletoe\Application\Commands;
 
 use ElectricJones\Mistletoe\CronSchedule;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use ElectricJones\Mistletoe\TaskPlanner;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -32,7 +32,7 @@ abstract class AbstractCommand extends Command
         $verbose = ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
 
         /**
-         * @var TaskBag $task
+         * @var Task $task
          */
         $i = 1;
         foreach ($tasks as $task) {

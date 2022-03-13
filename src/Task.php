@@ -8,12 +8,13 @@ use Exception;
  * Class TaskBag
  * @package FBS\Planner
  */
-class TaskBag
+class Task
 {
     /** @var string Task */
     protected string $task;
 
     /** @var array */
+    // @todo: enums
     protected array $environments = [TaskPlanner::PRODUCTION_ENVIRONMENT, TaskPlanner::DEVELOPMENT_ENVIRONMENT];
 
     /** @var array|string Tasks that must follow this one */

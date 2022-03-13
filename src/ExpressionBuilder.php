@@ -9,15 +9,15 @@ use Cron\CronExpression;
  */
 class ExpressionBuilder
 {
-    /** @var TaskBag */
-    protected TaskBag $bag;
+    /** @var Task */
+    protected Task $bag;
 
     /**
      * Builds an expression from the TaskBag
-     * @param TaskBag|null $bag
+     * @param Task|null $bag
      * @return CronExpression
      */
-    public function build(TaskBag $bag = null): CronExpression
+    public function build(Task $bag = null): CronExpression
     {
         if ($bag) {
             $this->setTaskBag($bag);
@@ -66,29 +66,29 @@ class ExpressionBuilder
 
     /**
      * Set the Task Bag
-     * @param TaskBag $bag
+     * @param Task $bag
      * @return $this
      */
-    public function setTaskBag(TaskBag $bag): static
+    public function setTaskBag(Task $bag): static
     {
         $this->bag = $bag;
         return $this;
     }
 
     /**
-     * @return TaskBag
+     * @return Task
      */
-    public function getTaskBag(): TaskBag
+    public function getTaskBag(): Task
     {
         return $this->bag;
     }
 
     /**
      * Is only the interval set in the bag?
-     * @param TaskBag $bag
+     * @param Task $bag
      * @return bool
      */
-    protected function onlyIntervalIsSet(TaskBag $bag): bool
+    protected function onlyIntervalIsSet(Task $bag): bool
     {
         return $bag->getInterval() !== null
             && $bag->getMonth() === null

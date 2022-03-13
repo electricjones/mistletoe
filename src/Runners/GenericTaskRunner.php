@@ -3,7 +3,7 @@
 use ElectricJones\Mistletoe\Command;
 use ElectricJones\Mistletoe\Contracts\RunnableInterface;
 use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 
 /**
  * Class Generic
@@ -25,7 +25,7 @@ class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterfac
 
         $processes = [];
 
-        /** @var TaskBag $task */
+        /** @var Task $task */
         foreach ($tasks as $task) {
             $processes[] = $task->getTask();
             $processes = array_merge($processes, $task->getFollowedBy());

@@ -1,7 +1,7 @@
 <?php namespace ElectricJones\Mistletoe\Test\Unit;
 
 use Cron\CronExpression;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use ElectricJones\Mistletoe\TaskPlanner;
 use PHPUnit\Framework\TestCase;
 
@@ -15,8 +15,8 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2');
 
         $expected = [
-            'Task1' => new TaskBag(),
-            'Task2' => new TaskBag(),
+            'Task1' => new Task(),
+            'Task2' => new Task(),
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), "failed to return correct list of tasks");
@@ -40,9 +40,15 @@ class TaskPlannerTest extends TestCase
         $planner->add(function() { return 3; })->schedule('1 1 1 * *');
 
         $expected = [
-            '_task1' => (new TaskBag('_task0'))->setTask(function() { return 1; })->setCronExpression('1 1 1 * *'),
-            '_task2' => (new TaskBag('_task0'))->setTask(function() { return 2; })->setCronExpression('1 1 1 * *'),
-            '_task3' => (new TaskBag('_task0'))->setTask(function() { return 3; })->setCronExpression('1 1 1 * *'),
+            '_task1' => (new Task('_task0'))->setTask(function () {
+                return 1;
+            })->setCronExpression('1 1 1 * *'),
+            '_task2' => (new Task('_task0'))->setTask(function () {
+                return 2;
+            })->setCronExpression('1 1 1 * *'),
+            '_task3' => (new Task('_task0'))->setTask(function () {
+                return 3;
+            })->setCronExpression('1 1 1 * *'),
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), "failed to schedule a closure task");
@@ -76,9 +82,9 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2')->at('4:19');
         $planner->add('Task3')->at('22:07');
 
-        $this->assertEquals((new TaskBag('Task1'))->setTime('11:21'), $planner->getTask('Task1'), "failed to set the first time");
-        $this->assertEquals((new TaskBag('Task2'))->setTime('4:19'), $planner->getTask('Task2'), "failed to set the second time");
-        $this->assertEquals((new TaskBag('Task3'))->setTime('22:07'), $planner->getTask('Task3'), "failed to set the third time");
+        $this->assertEquals((new Task('Task1'))->setTime('11:21'), $planner->getTask('Task1'), "failed to set the first time");
+        $this->assertEquals((new Task('Task2'))->setTime('4:19'), $planner->getTask('Task2'), "failed to set the second time");
+        $this->assertEquals((new Task('Task3'))->setTime('22:07'), $planner->getTask('Task3'), "failed to set the third time");
     }
 
     /** @test */
@@ -88,8 +94,8 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task1')->atMidnight();
         $planner->add('Task2')->atNoon();
 
-        $this->assertEquals((new TaskBag('Task1'))->setTime('24:00'), $planner->getTask('Task1'), "failed to set midnight");
-        $this->assertEquals((new TaskBag('Task2'))->setTime('12:00'), $planner->getTask('Task2'), "failed to set noon");
+        $this->assertEquals((new Task('Task1'))->setTime('24:00'), $planner->getTask('Task1'), "failed to set midnight");
+        $this->assertEquals((new Task('Task2'))->setTime('12:00'), $planner->getTask('Task2'), "failed to set noon");
     }
 
     /** @test */
@@ -100,9 +106,9 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2')->on('2/19');
         $planner->add('Task3')->on('7-28');
 
-        $this->assertEquals((new TaskBag('Task1'))->setMonth(12)->setDay(15), $planner->getTask('Task1'), "failed to set the first time");
-        $this->assertEquals((new TaskBag('Task2'))->setMonth(2)->setDay(19), $planner->getTask('Task2'), "failed to set the second time: make sure it normalized the format");
-        $this->assertEquals((new TaskBag('Task3'))->setMonth(7)->setDay(28), $planner->getTask('Task3'), "failed to set the third time: make sure it normalized the month");
+        $this->assertEquals((new Task('Task1'))->setMonth(12)->setDay(15), $planner->getTask('Task1'), "failed to set the first time");
+        $this->assertEquals((new Task('Task2'))->setMonth(2)->setDay(19), $planner->getTask('Task2'), "failed to set the second time: make sure it normalized the format");
+        $this->assertEquals((new Task('Task3'))->setMonth(7)->setDay(28), $planner->getTask('Task3'), "failed to set the third time: make sure it normalized the month");
     }
 
     /** @test */
@@ -113,9 +119,9 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2')->on('2/19')->andOn('2/21');
         $planner->add('Task3')->on('7-28')->andOn('3-22');
 
-        $this->assertEquals((new TaskBag('Task1'))->addMonth(12)->addDay(15)->addMonth(1)->addDay(20), $planner->getTask('Task1'), "failed to add the first time");
-        $this->assertEquals((new TaskBag('Task2'))->addMonth(2)->addDay(19)->addMonth(2)->addDay(21), $planner->getTask('Task2'), "failed to add the second time: make sure it normalized the format");
-        $this->assertEquals((new TaskBag('Task3'))->addMonth(7)->addDay(28)->addMonth(3)->addDay(22), $planner->getTask('Task3'), "failed to set the third time: make sure it normalized the month");
+        $this->assertEquals((new Task('Task1'))->addMonth(12)->addDay(15)->addMonth(1)->addDay(20), $planner->getTask('Task1'), "failed to add the first time");
+        $this->assertEquals((new Task('Task2'))->addMonth(2)->addDay(19)->addMonth(2)->addDay(21), $planner->getTask('Task2'), "failed to add the second time: make sure it normalized the format");
+        $this->assertEquals((new Task('Task3'))->addMonth(7)->addDay(28)->addMonth(3)->addDay(22), $planner->getTask('Task3'), "failed to set the third time: make sure it normalized the month");
     }
 
     /** @test */
@@ -125,7 +131,7 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task1')->onDay(7);
 
         $this->assertEquals([
-            'Task1' => (new TaskBag('Task1'))->setDay(7)
+            'Task1' => (new Task('Task1'))->setDay(7)
         ], $planner->getTasks(), "failed to return an array with the correct tasks"); // tested against all tasks for variety
     }
 
@@ -136,7 +142,7 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task1')->onDay(7)->andOnDay(2);
 
         $this->assertEquals([
-            'Task1' => (new TaskBag('Task1'))->setDay(7)->addDay(2)
+            'Task1' => (new Task('Task1'))->setDay(7)->addDay(2)
         ], $planner->getTasks(), "failed to return an array with the correct tasks"); // tested against all tasks for variety
     }
 
@@ -147,7 +153,7 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task1')->onWeekday(3)->onSaturday();
 
         $this->assertEquals([
-            'Task1' => (new TaskBag('Task1'))->addWeekday(3)->addWeekday(6)
+            'Task1' => (new Task('Task1'))->addWeekday(3)->addWeekday(6)
         ], $planner->getTasks(), "failed to return an array with the correct tasks"); // tested against all tasks for variety
     }
 
@@ -159,9 +165,9 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2')->onEnvironment(TaskPlanner::DEVELOPMENT_ENVIRONMENT);
         $planner->add('Task3')->onEnvironment('custom_environment');
 
-        $this->assertEquals((new TaskBag('Task1'))->addEnvironment('PRODUCTION'), $planner->getTask('Task1'), "failed to set production");
-        $this->assertEquals((new TaskBag('Task2'))->addEnvironment('DEVELOPMENT'), $planner->getTask('Task2'), "failed to set development");
-        $this->assertEquals((new TaskBag('Task3'))->addEnvironment('CUSTOM_ENVIRONMENT'), $planner->getTask('Task3'), "failed to set custom");
+        $this->assertEquals((new Task('Task1'))->addEnvironment('PRODUCTION'), $planner->getTask('Task1'), "failed to set production");
+        $this->assertEquals((new Task('Task2'))->addEnvironment('DEVELOPMENT'), $planner->getTask('Task2'), "failed to set development");
+        $this->assertEquals((new Task('Task3'))->addEnvironment('CUSTOM_ENVIRONMENT'), $planner->getTask('Task3'), "failed to set custom");
     }
 
     /** @test */
@@ -171,8 +177,8 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task1')->onProductionOnly();
         $planner->add('Task2')->onDevelopmentOnly();
 
-        $this->assertEquals((new TaskBag('Task1'))->setEnvironments('PRODUCTION'), $planner->getTask('Task1'), "failed to set production");
-        $this->assertEquals((new TaskBag('Task2'))->setEnvironments('DEVELOPMENT'), $planner->getTask('Task2'), "failed to set development");
+        $this->assertEquals((new Task('Task1'))->setEnvironments('PRODUCTION'), $planner->getTask('Task1'), "failed to set production");
+        $this->assertEquals((new Task('Task2'))->setEnvironments('DEVELOPMENT'), $planner->getTask('Task2'), "failed to set development");
     }
 
     /** @test */
@@ -181,7 +187,7 @@ class TaskPlannerTest extends TestCase
         $planner = new TaskPlanner();
         $planner->add('Task1')->followedBy('Task2')->followedBy('Task3');
 
-        $this->assertEquals((new TaskBag('Task1'))->setFollowedBy(['Task2', 'Task3']), $planner->getTask('Task1'), "failed to set followed by tasks");
+        $this->assertEquals((new Task('Task1'))->setFollowedBy(['Task2', 'Task3']), $planner->getTask('Task1'), "failed to set followed by tasks");
     }
 
     /** @test */
@@ -207,9 +213,9 @@ class TaskPlannerTest extends TestCase
             ->at('13:14');
 
         $expected = [
-            'SomeTask'    => (new TaskBag('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
-            'AnotherTask' => (new TaskBag('AnotherTask'))->setInterval('@daily')->setTime('13:14')->addEnvironment('STAGING'),
-            'ThirdTask'   => (new TaskBag('ThirdTask'))->setWeekday('6,0')->setMonth('2,4,6')->setTime('13:14')
+            'SomeTask'    => (new Task('SomeTask'))->setInterval('@yearly')->setDay(12)->setMonth(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
+            'AnotherTask' => (new Task('AnotherTask'))->setInterval('@daily')->setTime('13:14')->addEnvironment('STAGING'),
+            'ThirdTask'   => (new Task('ThirdTask'))->setWeekday('6,0')->setMonth('2,4,6')->setTime('13:14')
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), 'failed to create complex bags');
@@ -223,8 +229,8 @@ class TaskPlannerTest extends TestCase
         $planner->add('Task2')->daily()->every3Hours();
 
         $expected = [
-            'Task1' => (new TaskBag('Task1'))->setInterval('@daily')->setMinute('*/4'),
-            'Task2' => (new TaskBag('Task2'))->setInterval('@daily')->setHour('*/3'),
+            'Task1' => (new Task('Task1'))->setInterval('@daily')->setMinute('*/4'),
+            'Task2' => (new Task('Task2'))->setInterval('@daily')->setHour('*/3'),
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), 'failed to use increment');

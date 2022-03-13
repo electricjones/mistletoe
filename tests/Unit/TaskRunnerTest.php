@@ -3,7 +3,7 @@
 use Cron\CronExpression;
 use ElectricJones\Mistletoe\Command;
 use ElectricJones\Mistletoe\Runners\GenericTaskRunner as TaskRunner;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 use ElectricJones\Mistletoe\Test\Mocks\MockTask1;
 use ElectricJones\Mistletoe\Test\Mocks\MockTask2;
 use ElectricJones\Mistletoe\Test\Mocks\MockTask3;
@@ -23,36 +23,36 @@ class TaskRunnerTest extends TestCase
         };
 
         $this->taskBags = [
-            MockTask1::class => new TaskBag([ // is due
+            MockTask1::class => new Task([ // is due
                 'task'           => MockTask1::class,
                 'cronExpression' => new CronExpression('30 12 1 1 *'),
                 'environments'   => ['PRODUCTION']
             ]),
 
-            MockTask2::class => new TaskBag([
+            MockTask2::class => new Task([
                 'task'           => MockTask2::class,
                 'cronExpression' => new CronExpression('45 * * * *'),
                 'environments'   => ['PRODUCTION', 'DEVELOPMENT']
             ]),
 
-            MockTask3::class => new TaskBag([  // is due, on all environments by default
-                'task' => MockTask3::class,
+            MockTask3::class => new Task([  // is due, on all environments by default
+                'task'           => MockTask3::class,
                 'cronExpression' => new CronExpression('30 * * * *')
             ]),
 
             // @todo: closure tasks do not work with FlexTaskRunner yet, but Command()s do
-            '_task0' => new TaskBag([ // is due
+            '_task0'         => new Task([ // is due
                 'task'           => $this->closureTask1,
                 'cronExpression' => new CronExpression('1,30 4,8,12 * 1,6,12 *'),
                 'environments'   => ['PRODUCTION']
             ]),
 
-            '_task1' => new TaskBag([
-                'task' => $this->closureTask2,
+            '_task1' => new Task([
+                'task'           => $this->closureTask2,
                 'cronExpression' => new CronExpression('1,30 4,8,12 * 2,6,12 *')
             ]),
 
-            '_task2' => new TaskBag([
+            '_task2' => new Task([
                 'task'           => $this->closureTask2,
                 'cronExpression' => new CronExpression('30 12 1 1 *'),
                 'environments'   => ['DEVELOPMENT']

@@ -2,14 +2,14 @@
 
 use Cron\CronExpression;
 use ElectricJones\Mistletoe\ExpressionBuilder;
-use ElectricJones\Mistletoe\TaskBag;
+use ElectricJones\Mistletoe\Task;
 
 /**
  * Class MockExpressionBuilder
  */
 class MockExpressionBuilder extends ExpressionBuilder
 {
-    protected TaskBag $bag;
+    protected Task $bag;
     protected $testExpression;
 
     public function __construct($testExpression)
@@ -18,19 +18,19 @@ class MockExpressionBuilder extends ExpressionBuilder
     }
 
     /**
-     * @param TaskBag|null $bag
+     * @param Task|null $bag
      * @return CronExpression
      */
-    public function build(TaskBag $bag = null): CronExpression
+    public function build(Task $bag = null): CronExpression
     {
         return $this->testExpression;
     }
 
     /**
-     * @param TaskBag $bag
+     * @param Task $bag
      * @return $this
      */
-    public function setTaskBag(TaskBag $bag): static
+    public function setTaskBag(Task $bag): static
     {
         $this->bag = $bag;
         return $this;
@@ -46,9 +46,9 @@ class MockExpressionBuilder extends ExpressionBuilder
     }
 
     /**
-     * @return TaskBag
+     * @return Task
      */
-    public function getTaskBag(): TaskBag
+    public function getTaskBag(): Task
     {
         //
     }

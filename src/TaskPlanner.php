@@ -15,8 +15,8 @@ class TaskPlanner
     /** @var array Tasks currently scheduled */
     protected array $tasks = [];
 
-    /** @var  TaskBag */
-    protected TaskBag $currentTask;
+    /** @var  Task */
+    protected Task $currentTask;
 
     /** @var  string Namespace prefix */
     protected string $nsPrefix = '';
@@ -508,9 +508,9 @@ class TaskPlanner
 
     /**
      * @param string $name
-     * @return TaskBag
+     * @return Task
      */
-    public function getTask(string $name): TaskBag
+    public function getTask(string $name): Task
     {
         return $this->tasks[$name];
     }
@@ -566,7 +566,7 @@ class TaskPlanner
      */
     protected function createNewTask(string $task, Closure $body = null)
     {
-        $this->tasks[$task] = new TaskBag($task);
+        $this->tasks[$task] = new Task($task);
         $this->setCurrentTask($task);
 
         $this->getCurrentTask()->setTask(
@@ -583,9 +583,9 @@ class TaskPlanner
     }
 
     /**
-     * @return TaskBag
+     * @return Task
      */
-    protected function getCurrentTask(): TaskBag
+    protected function getCurrentTask(): Task
     {
         return $this->currentTask;
     }
