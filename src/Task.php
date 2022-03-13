@@ -1,7 +1,10 @@
 <?php
+
 namespace ElectricJones\Mistletoe;
 
+use DateTime;
 use Exception;
+use InvalidArgumentException;
 
 /**
  * Class TaskBag
@@ -17,53 +20,175 @@ class Task
     // @todo: enums
     protected array $environments = [TaskPlanner::PRODUCTION_ENVIRONMENT, TaskPlanner::DEVELOPMENT_ENVIRONMENT];
 
-    /** @var array|string Tasks that must follow this one */
-    protected string|array $followedBy = [];
-
-    protected CronExpression $cronExpression;
+    /** @var string[] Tasks that must follow this one */
+    protected array $followedBy = [];
 
     /* Expressions */
     /** @var null|string */
+    // @todo: cannot be an array
     protected ?string $interval = null; // @daily, @yearly
 
-    /** @var null|string|int|array */
-    protected string|int|array|null $minute = null;
+    /** @var string[] */
+    protected array $minute = [];
 
-    /** @var null|string|int|array */
-    protected string|int|array|null $hour = null;
+    /** @var string[] */
+    protected array $hour = [];
 
-    /** @var null|string|int|array */
-    protected string|int|array|null $month = null; // 12
+    /** @var string[] */
+    protected array $month = [];
 
-    /** @var null|string|int|array */
-    protected string|int|array|null $day = null; // 25
+    /** @var string[] */
+    protected array $day = [];
 
-    /** @var null|string|int|array */
-    protected string|int|array|null $weekday = null;
+    /** @var string[] */
+    protected array $weekday = [];
 
-    /* Dependencies */
-    protected CronExpression $expressionBuilder;
-
+    private ?CronExpression $cron_expression = null;
 
     /**
      * TaskBag constructor.
-     * @param string|null $task
-     * @todo: orders
+     * @param string $name
+     * @param string|null $interval
+     * @param string|array $minute
+     * @param string|array $hour
+     * @param string|array $month
+     * @param string|array $day
+     * @param string|array $weekday
+     * @param string|array $environments
+     * @param string|array $followedBy
      */
-    public function __construct($task = null)
+    public function __construct(
+        string       $name,
+        string|null  $interval = null,
+        string|array $minute = [],
+        string|array $hour = [],
+        string|array $month = [],
+        string|array $day = [],
+        string|array $weekday = [],
+
+        string|array $environments = [],
+        string|array $followedBy = [],
+    )
     {
-        if (is_string($task)) {
-            $this->name = $task;
+        $this->name = $name;
+        $this->interval = $interval;
 
-        } elseif (is_array($task)) {
+        $this->minute = $this->prepareAndValidate($minute);
+        $this->hour = $this->prepareAndValidate($hour);
+        $this->month = $this->prepareAndValidate($month);
+        $this->day = $this->prepareAndValidate($day);
+        $this->weekday = $this->prepareAndValidate($weekday);
+        $this->environments = $this->prepareAndValidate($environments);
+        $this->followedBy = $this->prepareAndValidate($followedBy);
+    }
 
-            // You may also pass in an array of values at construction
-            // They MUST match the property names exactly
-            foreach ($task as $key => $value) {
-                $this->{'set'.ucfirst($key)}($value);
+
+
+
+    /* Just passed through to CronExpression */
+    /**
+     * @param string $currentTime
+     * @return bool
+     */
+    public function isDue(string $currentTime = 'now'): bool
+    {
+        return $this->getCronExpression()?->isDue($currentTime);
+    }
+
+    /**
+     * @param string $currentTime
+     * @param int $nth
+     * @param bool $allowCurrentDate
+     * @return DateTime|null
+     * @throws Exception
+     */
+    public function getNextRunDate(string $currentTime = 'now', int $nth = 0, bool $allowCurrentDate = false): ?DateTime
+    {
+        return $this->getCronExpression()?->getNextRunDate($currentTime, $nth, $allowCurrentDate);
+    }
+
+    /**
+     * @param string $currentTime
+     * @param int $nth
+     * @param bool $allowCurrentDate
+     * @return DateTime|null
+     * @throws Exception
+     */
+    public function getPreviousRunDate(string $currentTime = 'now', int $nth = 0, bool $allowCurrentDate = false): ?DateTime
+    {
+        return $this->getCronExpression()?->getPreviousRunDate($currentTime, $nth, $allowCurrentDate);
+    }
+
+
+    /**
+     * @param array|string $items
+     * @return array
+     */
+    private function prepareAndValidate(array|string $items): array
+    {
+        $items = $this->forceToArray($items);
+        foreach ($items as $item) {
+            if (!is_string($item)) {
+                throw new InvalidArgumentException("Items must be strings");
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param $time
+     * @return array
+     */
+    private function parseTime($time): array
+    {
+        return explode(':', $time);
+    }
+
+    /**
+     * @param string $date
+     * @return array
+     */
+    private function parseDate(string $date): array
+    {
+        if (strpos($date, '-')) {
+            return explode('-', $date);
+        } else {
+            return explode('/', $date);
+        }
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     */
+    private function appendValue(string $key, $value)
+    {
+        $value = $this->forceToArray($value);
+
+        foreach ($value as $item) {
+            if (!is_null($this->$key)) {
+                $this->$key = $this->$key . ',' . $item;
+            } else {
+                $this->$key = (string)$item;
             }
         }
     }
+
+    /**
+     * @param $value
+     * @return array
+     * @internal param $minute
+     */
+    private function forceToArray($value): array
+    {
+        if (!is_array($value)) {
+            return [$value];
+        }
+
+        return $value;
+    }
+
 
     /**
      * @return string
@@ -75,16 +200,16 @@ class Task
 
     /**
      * @param string $name
-     * @return $this
+     * @return Task
      */
-    public function setName(string $name): static
+    public function setName(string $name): Task
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getInterval(): ?string
     {
@@ -92,22 +217,111 @@ class Task
     }
 
     /**
-     * @param string $interval
-     * @return $this
+     * @param string|null $interval
+     * @return Task
      */
-    public function setInterval($interval): static
+    public function setInterval(?string $interval): Task
     {
         $this->interval = $interval;
         return $this;
     }
 
     /**
-     * Parses a time from format 12:14
-     * @param $time
-     * @return $this
-     * @throws Exception
+     * @return string[]
      */
-    public function setTime($time): static
+    public function getMinute(): array
+    {
+        return $this->minute;
+    }
+
+    /**
+     * @param string[] $minute
+     * @return Task
+     */
+    public function setMinute(array $minute): Task
+    {
+        $this->minute = $minute;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getHour(): array
+    {
+        return $this->hour;
+    }
+
+    /**
+     * @param string[] $hour
+     * @return Task
+     */
+    public function setHour(array $hour): Task
+    {
+        $this->hour = $hour;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMonth(): string
+    {
+        return implode(",", $this->month);
+    }
+
+    /**
+     * @param string[] $month
+     * @return Task
+     */
+    public function setMonth(array $month): Task
+    {
+        $this->month = $month;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDay(): array
+    {
+        return $this->day;
+    }
+
+    /**
+     * @param string[] $day
+     * @return Task
+     */
+    public function setDay(array $day): Task
+    {
+        $this->day = $day;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getWeekday(): array
+    {
+        return $this->weekday;
+    }
+
+    /**
+     * @param string[] $weekday
+     * @return Task
+     */
+    public function setWeekday(array $weekday): Task
+    {
+        $this->weekday = $weekday;
+        return $this;
+    }
+
+    /**
+     * Parses a time from format 12:14
+     * @param string $time
+     * @return $this
+     */
+    public function setTime(string $time): static
     {
         $parts = $this->parseTime($time);
         $this->setHour($parts[0]);
@@ -120,7 +334,7 @@ class Task
      * @param string $time
      * @return $this
      */
-    public function addTime($time): static
+    public function addTime(string $time): static
     {
         $parts = $this->parseTime($time);
         $this->addHour($parts[0]);
@@ -137,8 +351,8 @@ class Task
     public function setDate(string $date): static
     {
         $parts = $this->parseDate($date);
-        $this->setMonth(intval($parts[0]));
-        $this->setDay(intval($parts[1]));
+        $this->setMonth($parts[0]);
+        $this->setDay($parts[1]);
 
         return $this;
     }
@@ -150,56 +364,20 @@ class Task
     public function addDate(string $date): static
     {
         $parts = $this->parseDate($date);
-        $this->addMonth(intval($parts[0]));
-        $this->addDay(intval($parts[1]));
+        $this->addMonth($parts[0]);
+        $this->addDay($parts[1]);
 
         return $this;
     }
 
     /**
-     * @param integer|string $month
+     * @param string $month
      * @return $this
      */
-    public function setMonth(int|string $month): static
+    public function addMonth(string $month): static
     {
-        $this->month = $month;
+        $this->month[] = $month;
         return $this;
-    }
-
-    /**
-     * @return int|string|null
-     */
-    public function getMonth(): null|int|string
-    {
-        return $this->month;
-    }
-
-    /**
-     * @param array|int|string $month
-     * @return $this
-     */
-    public function addMonth(array|int|string $month): static
-    {
-        $this->appendValue('month', $month);
-        return $this;
-    }
-
-    /**
-     * @param array|integer|string $day
-     * @return $this
-     */
-    public function setDay(array|int|string $day): static
-    {
-        $this->day = $day;
-        return $this;
-    }
-
-    /**
-     * @return array|int|string|null
-     */
-    public function getDay(): array|int|null|string
-    {
-        return $this->day;
     }
 
     /**
@@ -208,27 +386,8 @@ class Task
      */
     public function addDay(array|int|string $day): static
     {
-        $this->appendValue('day', $day);
+        $this->day[] = $day;
         return $this;
-    }
-
-    /**
-     * @param array|int|string $minute
-     * @return $this
-     * @throws Exception
-     */
-    public function setMinute(array|int|string $minute): static
-    {
-        $this->minute = $minute;
-        return $this;
-    }
-
-    /**
-     * @return int|null|string
-     */
-    public function getMinute(): array|int|null|string
-    {
-        return $this->minute;
     }
 
     /**
@@ -245,24 +404,6 @@ class Task
      * @param array|int|string $hour
      * @return $this
      */
-    public function setHour(array|int|string $hour): static
-    {
-        $this->hour = $hour;
-        return $this;
-    }
-
-    /**
-     * @return array|int|string|null
-     */
-    public function getHour(): array|int|null|string
-    {
-        return $this->hour;
-    }
-
-    /**
-     * @param array|int|string $hour
-     * @return $this
-     */
     public function addHour(array|int|string $hour): static
     {
         $this->appendValue('hour', $hour);
@@ -270,28 +411,10 @@ class Task
     }
 
     /**
-     * @param array|int|string $weekday
+     * @param string $weekday
      * @return $this
      */
-    public function setWeekday(array|int|string $weekday): static
-    {
-        $this->weekday = $weekday;
-        return $this;
-    }
-
-    /**
-     * @return array|int|string|null
-     */
-    public function getWeekday(): array|int|null|string
-    {
-        return $this->weekday;
-    }
-
-    /**
-     * @param string|int|array $weekday
-     * @return $this
-     */
-    public function addWeekday($weekday): static
+    public function addWeekday(string $weekday): static
     {
         $this->appendValue('weekday', $weekday);
         return $this;
@@ -357,137 +480,25 @@ class Task
         return $this;
     }
 
-    /**
-     * @param string|CronExpression $cronExpression
-     * @return $this
-     */
-    public function setCronExpression(CronExpression|string $cronExpression): static
-    {
-        $this->cronExpression = ($cronExpression instanceof CronExpression)
-            ? $cronExpression
-            : new CronExpression($cronExpression);
-
-        return $this;
-    }
 
     /**
-     * @return CronExpression
-     * @todo
+     * @return CronExpression|null
      */
-    public function getCronExpression(): CronExpression
+    public function getCronExpression(): ?CronExpression
     {
-        return ($this->cronExpression instanceof CronExpression) ? $this->cronExpression : $this->buildExpression();
-    }
-
-    /**
-     * @return CronExpression
-     */
-    protected function buildExpression(): CronExpression
-    {
-        return \ElectricJones\Mistletoe\CronExpression::from($this);
-    }
-
-    /**
-     * @param CronExpression $expressionBuilder
-     */
-    public function setExpressionBuilder(CronExpression $expressionBuilder)
-    {
-        $this->expressionBuilder = $expressionBuilder;
-    }
-
-    /**
-     * @return CronExpression|CronExpression
-     */
-    protected function getExpressionBuilder()
-    {
-        return ($this->expressionBuilder instanceof CronExpression) ? $this->expressionBuilder : new CronExpression();
-    }
-
-
-    /* Just passed through to CronExpression */
-    /**
-     * @param string $currentTime
-     * @return bool
-     */
-    public function isDue(string $currentTime = 'now'): bool
-    {
-        return $this->getCronExpression()->isDue($currentTime);
-    }
-
-    /**
-     * @param string $currentTime
-     * @param int $nth
-     * @param bool $allowCurrentDate
-     * @throws Exception
-     */
-    public function getNextRunDate(string $currentTime = 'now', int $nth = 0, bool $allowCurrentDate = false)
-    {
-        $this->getCronExpression()->getNextRunDate($currentTime, $nth, $allowCurrentDate);
-    }
-
-    /**
-     * @param string $currentTime
-     * @param int $nth
-     * @param bool $allowCurrentDate
-     * @throws Exception
-     */
-    public function getPreviousRunDate(string $currentTime = 'now', int $nth = 0, bool $allowCurrentDate = false)
-    {
-        $this->getCronExpression()->getPreviousRunDate($currentTime, $nth, $allowCurrentDate);
-    }
-
-    /* Internals */
-    /**
-     * @param $time
-     * @return array
-     */
-    protected function parseTime($time): array
-    {
-        return explode(':', $time);
-    }
-
-    /**
-     * @param string $date
-     * @return array
-     */
-    protected function parseDate(string $date): array
-    {
-        if (strpos($date, '-')) {
-            return explode('-', $date);
-        } else {
-            return explode('/', $date);
-        }
-    }
-
-    /**
-     * @param string $key
-     * @param $value
-     * @param string $deliminator
-     */
-    protected function appendValue(string $key, $value, string $deliminator = ',')
-    {
-        $value = $this->forceToArray($value);
-
-        foreach ($value as $item) {
-            if (!is_null($this->$key)) {
-                $this->$key = (string)$this->$key . $deliminator . $item;
-            } else {
-                $this->$key = (string)$item;
-            }
-        }
-    }
-
-    /**
-     * @param $value
-     * @return array
-     * @internal param $minute
-     */
-    protected function forceToArray($value): array
-    {
-        if (!is_array($value)) {
-            return [$value];
+        if (!$this->cron_expression) {
+            // @todo: only return if there is something set
+            $this->cron_expression = CronExpression::from($this);
         }
 
-        return $value;
+        return $this->cron_expression;
+    }
+
+    /**
+     * @param CronExpression|null $cron_expression
+     */
+    public function setCronExpression(?CronExpression $cron_expression): void
+    {
+        $this->cron_expression = $cron_expression;
     }
 }

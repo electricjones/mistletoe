@@ -2,14 +2,14 @@
 
 /* The Getter and Setter methods are all tested in `TaskPlannerTest`. No need to duplicate */
 
-use Cron\CronExpression;
+use ElectricJones\Mistletoe\CronExpression;
 use ElectricJones\Mistletoe\Task;
 use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
     /** @test */
-    public function TestConstructNewBagWithName()
+    public function it_builds_a_new_task_with_name()
     {
         $task = new Task('Task');
         $this->assertEquals('Task', $task->getName(), 'failed to set task name');
@@ -55,16 +55,16 @@ class TaskTest extends TestCase
     /** @test */
     public function TestConstructNewBagWithParameters()
     {
-        $task = new Task([
-            'task'         => 'name',
-            'environments' => ['env'],
-            'followedBy'   => ['one', 'two'],
-            'interval'     => 'int',
-            'hour'         => 'hour',
-            'minute'       => 'minute',
-            'month'        => 'month',
-            'day'          => 'day'
-        ]);
+        $task = new Task(
+            name: 'name',
+            interval: 'int',
+            minute: 'minute',
+            hour: 'hour',
+            month: 'month',
+            day: 'day',
+            environments: ['env'],
+            followedBy: ['one', 'two']
+        );
 
         $this->assertEquals('name', $task->getName(), 'failed to set task name');
         $this->assertEquals(['env'], $task->getEnvironments(), 'failed to set environments');
@@ -79,11 +79,6 @@ class TaskTest extends TestCase
     /** @test */
     public function TestSetCronExpression()
     {
-        // From a string expression
-        $task = new Task('Task');
-        $task->setCronExpression('1 1 1 1 1');
-        $this->assertEquals(new CronExpression('1 1 1 1 1'), $task->getCronExpression(), 'failed to set cron expression from string');
-
         // From a CronExpression instance
         $task = new Task('Task');
         $expression = new CronExpression('1 2 3 4 5');

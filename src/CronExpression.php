@@ -23,6 +23,7 @@ class CronExpression extends BaseCronExpression
      */
     static public function from(Task $task): static
     {
+        // @Todo: return null if unable
         $parts = [];
 
         if (static::onlyIntervalIsSet($task)) {
