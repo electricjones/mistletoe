@@ -27,7 +27,7 @@ class GenericTaskRunner extends AbstractTaskRunner implements TaskRunnerInterfac
 
         /** @var Task $task */
         foreach ($tasks as $task) {
-            $processes[] = $task->getTask();
+            $processes[] = $task->getName();
             $processes = array_merge($processes, $task->getFollowedBy());
         }
 

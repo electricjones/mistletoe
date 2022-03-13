@@ -569,7 +569,7 @@ class TaskPlanner
         $this->tasks[$task] = new Task($task);
         $this->setCurrentTask($task);
 
-        $this->getCurrentTask()->setTask(
+        $this->getCurrentTask()->setName(
             ($body) ? $body : $task
         );
     }

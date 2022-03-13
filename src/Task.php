@@ -1,7 +1,6 @@
 <?php
 namespace ElectricJones\Mistletoe;
 
-use Cron\CronExpression;
 use Exception;
 
 /**
@@ -11,7 +10,8 @@ use Exception;
 class Task
 {
     /** @var string Task */
-    protected string $task;
+    // @todo: `name` is not the right name here
+    protected string $name;
 
     /** @var array */
     // @todo: enums
@@ -20,7 +20,6 @@ class Task
     /** @var array|string Tasks that must follow this one */
     protected string|array $followedBy = [];
 
-    /** @var  CronExpression */
     protected CronExpression $cronExpression;
 
     /* Expressions */
@@ -43,8 +42,7 @@ class Task
     protected string|int|array|null $weekday = null;
 
     /* Dependencies */
-    /** @var ExpressionBuilder */
-    protected ExpressionBuilder $expressionBuilder;
+    protected CronExpression $expressionBuilder;
 
 
     /**
@@ -55,7 +53,7 @@ class Task
     public function __construct($task = null)
     {
         if (is_string($task)) {
-            $this->task = $task;
+            $this->name = $task;
 
         } elseif (is_array($task)) {
 
@@ -70,18 +68,18 @@ class Task
     /**
      * @return string
      */
-    public function getTask(): string
+    public function getName(): string
     {
-        return $this->task;
+        return $this->name;
     }
 
     /**
-     * @param string $task
+     * @param string $name
      * @return $this
      */
-    public function setTask($task): static
+    public function setName(string $name): static
     {
-        $this->task = $task;
+        $this->name = $name;
         return $this;
     }
 
@@ -159,19 +157,19 @@ class Task
     }
 
     /**
-     * @param array|integer|string $month
+     * @param integer|string $month
      * @return $this
      */
-    public function setMonth(array|int|string $month): static
+    public function setMonth(int|string $month): static
     {
         $this->month = $month;
         return $this;
     }
 
     /**
-     * @return int|string
+     * @return int|string|null
      */
-    public function getMonth(): int|string
+    public function getMonth(): null|int|string
     {
         return $this->month;
     }
@@ -386,25 +384,23 @@ class Task
      */
     protected function buildExpression(): CronExpression
     {
-        $expression = $this->getExpressionBuilder()->setTaskBag($this)->build();
-        $this->setCronExpression($expression);
-        return $expression;
+        return \ElectricJones\Mistletoe\CronExpression::from($this);
     }
 
     /**
-     * @param ExpressionBuilder $expressionBuilder
+     * @param CronExpression $expressionBuilder
      */
-    public function setExpressionBuilder(ExpressionBuilder $expressionBuilder)
+    public function setExpressionBuilder(CronExpression $expressionBuilder)
     {
         $this->expressionBuilder = $expressionBuilder;
     }
 
     /**
-     * @return ExpressionBuilder|ExpressionBuilder
+     * @return CronExpression|CronExpression
      */
     protected function getExpressionBuilder()
     {
-        return ($this->expressionBuilder instanceof ExpressionBuilder) ? $this->expressionBuilder : new ExpressionBuilder();
+        return ($this->expressionBuilder instanceof CronExpression) ? $this->expressionBuilder : new CronExpression();
     }
 
 

@@ -42,7 +42,7 @@ abstract class AbstractCommand extends Command
             $row[] = $i;
 
             // Name
-            $row[] = $task->getTask();
+            $row[] = $task->getName();
 
             if ($verbose) {
                 // Schedule

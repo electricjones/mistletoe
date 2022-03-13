@@ -40,13 +40,13 @@ class TaskPlannerTest extends TestCase
         $planner->add(function() { return 3; })->schedule('1 1 1 * *');
 
         $expected = [
-            '_task1' => (new Task('_task0'))->setTask(function () {
+            '_task1' => (new Task('_task0'))->setName(function () {
                 return 1;
             })->setCronExpression('1 1 1 * *'),
-            '_task2' => (new Task('_task0'))->setTask(function () {
+            '_task2' => (new Task('_task0'))->setName(function () {
                 return 2;
             })->setCronExpression('1 1 1 * *'),
-            '_task3' => (new Task('_task0'))->setTask(function () {
+            '_task3' => (new Task('_task0'))->setName(function () {
                 return 3;
             })->setCronExpression('1 1 1 * *'),
         ];
