@@ -56,10 +56,10 @@ class ExpressionBuilder
 
     /**
      * Builds expression from a string expression
-     * @param null|string $string
+     * @param string|null $string
      * @return CronExpression
      */
-    public function buildFrom($string): CronExpression
+    public function buildFrom(?string $string): CronExpression
     {
         return new CronExpression($string);
     }

@@ -37,10 +37,10 @@ class MockExpressionBuilder extends ExpressionBuilder
     }
 
     /**
-     * @param $string
+     * @param string|null $string
      * @return CronExpression
      */
-    public function buildFrom($string): CronExpression
+    public function buildFrom(?string $string): CronExpression
     {
         // Not needed
     }

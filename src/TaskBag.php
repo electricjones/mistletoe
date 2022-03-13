@@ -2,14 +2,13 @@
 namespace ElectricJones\Mistletoe;
 
 use Cron\CronExpression;
-use ElectricJones\Mistletoe\Contracts\TaskBagInterface;
 use Exception;
 
 /**
  * Class TaskBag
  * @package FBS\Planner
  */
-class TaskBag implements TaskBagInterface
+class TaskBag
 {
     /** @var string Task */
     protected string $task;
