@@ -96,7 +96,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
             }
 
             if ($task->isDue($this->currentTime)) {
-                if (in_array($this->currentEnvironment, $task->getEnvironments())) {
+                if ($task->getEnvironments() === [] or in_array($this->currentEnvironment, $task->getEnvironments())) {
                     $dueTasks[$taskName] = $task;
                 }
             }

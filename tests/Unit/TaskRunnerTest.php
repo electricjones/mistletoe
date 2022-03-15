@@ -1,7 +1,7 @@
 <?php namespace ElectricJones\Mistletoe\Test\Unit;
 
-use Cron\CronExpression;
 use ElectricJones\Mistletoe\Command;
+use ElectricJones\Mistletoe\CronExpression;
 use ElectricJones\Mistletoe\Runners\GenericTaskRunner as TaskRunner;
 use ElectricJones\Mistletoe\Task;
 use ElectricJones\Mistletoe\Test\Mocks\MockTask1;
@@ -23,40 +23,35 @@ class TaskRunnerTest extends TestCase
         };
 
         $this->taskBags = [
-            MockTask1::class => new Task([ // is due
-                'task'           => MockTask1::class,
-                'cronExpression' => new CronExpression('30 12 1 1 *'),
-                'environments'   => ['PRODUCTION']
-            ]),
+            MockTask1::class => (new Task( // is due
+                name: MockTask1::class,
+                environments: ['PRODUCTION'],
+            ))->setCronExpression(new CronExpression('30 12 1 1 *')),
 
-            MockTask2::class => new Task([
-                'task'           => MockTask2::class,
-                'cronExpression' => new CronExpression('45 * * * *'),
-                'environments'   => ['PRODUCTION', 'DEVELOPMENT']
-            ]),
+            MockTask2::class => (new Task(
+                name: MockTask2::class,
+                environments: ['PRODUCTION', 'DEVELOPMENT']
+            ))->setCronExpression(new CronExpression('45 * * * *')),
 
-            MockTask3::class => new Task([  // is due, on all environments by default
-                'task'           => MockTask3::class,
-                'cronExpression' => new CronExpression('30 * * * *')
-            ]),
+            MockTask3::class => (new Task(  // is due, on all environments by default
+                name: MockTask3::class,
+            ))->setCronExpression(new CronExpression('30 * * * *')),
 
             // @todo: closure tasks do not work with FlexTaskRunner yet, but Command()s do
-            '_task0'         => new Task([ // is due
-                'task'           => $this->closureTask1,
-                'cronExpression' => new CronExpression('1,30 4,8,12 * 1,6,12 *'),
-                'environments'   => ['PRODUCTION']
-            ]),
+            '_task0'         => (new Task( // is due
+//                name: $this->closureTask1,
+                name: 'temporary',
+                environments: ['PRODUCTION']
+            ))->setCronExpression(new CronExpression('1,30 4,8,12 * 1,6,12 *')),
+            //
+            //            '_task1' => (new Task(
+            //                name: $this->closureTask2,
+            //            ))->setCronExpression(new CronExpression('1,30 4,8,12 * 2,6,12 *')),
 
-            '_task1' => new Task([
-                'task'           => $this->closureTask2,
-                'cronExpression' => new CronExpression('1,30 4,8,12 * 2,6,12 *')
-            ]),
-
-            '_task2' => new Task([
-                'task'           => $this->closureTask2,
-                'cronExpression' => new CronExpression('30 12 1 1 *'),
-                'environments'   => ['DEVELOPMENT']
-            ]),
+            //            '_task2' => (new Task(
+            //                name: 'temporary',
+            //                environments: ['DEVELOPMENT']
+            //            ))->setCronExpression(new CronExpression('30 12 1 1 *')),
         ];
     }
 
