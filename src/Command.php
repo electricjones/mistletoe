@@ -10,7 +10,6 @@ class Command
 
     public function __construct($command)
     {
-
         $this->command = $command;
     }
 

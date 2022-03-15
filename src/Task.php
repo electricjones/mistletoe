@@ -13,15 +13,14 @@ use InvalidArgumentException;
 class Task
 {
     /** @var string Task */
-    // @todo: `name` is not the right name here
-    protected string $name;
+    protected string $callable;
 
     /** @var array */
     // @todo: enums
     protected array $environments = [TaskPlanner::PRODUCTION_ENVIRONMENT, TaskPlanner::DEVELOPMENT_ENVIRONMENT];
 
-    /** @var string[] Tasks that must follow this one */
-    protected array $followedBy = [];
+    /** @var callable|string|Command[] Tasks that must follow this one */
+    protected array $followed_by = [];
 
     /* Expressions */
     /** @var null|string */
@@ -47,7 +46,7 @@ class Task
 
     /**
      * TaskBag constructor.
-     * @param string $name // @todo: closure?
+     * @param string $callable
      * @param string|null $interval
      * @param int|string|int[]|string[] $minutes
      * @param int|string|int[]|string[] $hours
@@ -58,7 +57,7 @@ class Task
      * @param string|string[] $followed_by
      */
     public function __construct(
-        string           $name,
+        string           $callable,
         string|null      $interval = null,
         int|string|array $minutes = [],
         int|string|array $hours = [],
@@ -70,7 +69,7 @@ class Task
         string|array     $followed_by = [],
     )
     {
-        $this->name = $name;
+        $this->callable = $callable;
         $this->interval = $interval;
 
         $this->minutes = $this->prepareAndValidateValues($minutes);
@@ -79,7 +78,7 @@ class Task
         $this->days = $this->prepareAndValidateValues($days);
         $this->weekdays = $this->prepareAndValidateValues($weekdays);
         $this->environments = $this->prepareAndValidateValues($environments);
-        $this->followedBy = $this->prepareAndValidateValues($followed_by);
+        $this->followed_by = $this->prepareAndValidateValues($followed_by);
     }
 
     /* Expressions */
@@ -210,18 +209,18 @@ class Task
     /**
      * @return string
      */
-    public function getName(): string
+    public function getCallable(): string
     {
-        return $this->name;
+        return $this->callable;
     }
 
     /**
-     * @param string $name
+     * @param string $callable
      * @return Task
      */
-    public function setName(string $name): Task
+    public function setCallable(string $callable): Task
     {
-        $this->name = $name;
+        $this->callable = $callable;
         return $this;
     }
 
@@ -514,33 +513,32 @@ class Task
     }
 
     /**
-     * @param string $task
+     * @param string|callable|Command $task
      * @return $this
      */
-    public function addFollowedBy(string $task): static
+    public function addFollowedBy(string|callable|Command $task): static
     {
-        $this->followedBy[] = $task;
+        $this->followed_by[] = $task;
         return $this;
     }
 
     /**
-     * @return array|string
+     * @return array
      */
-    public function getFollowedBy(): array|string
+    public function getFollowedBy(): array
     {
-        return $this->followedBy;
+        return $this->followed_by;
     }
 
     /**
-     * @param array|string $followedBy
+     * @param array|string|callable|Command $followed_by
      * @return $this
      */
-    public function setFollowedBy(array|string $followedBy): static
+    public function setFollowedBy(array|string|callable|Command $followed_by): static
     {
-        $this->followedBy = $followedBy;
+        $this->followed_by = $this->forceToArray($followed_by);
         return $this;
     }
-
 
     /**
      * @return CronExpression|null

@@ -12,7 +12,7 @@ class TaskTest extends TestCase
     public function it_builds_a_new_task_with_name()
     {
         $task = new Task('Task');
-        $this->assertEquals('Task', $task->getName(), 'failed to set task name');
+        $this->assertEquals('Task', $task->getCallable(), 'failed to set task name');
     }
 
     /* Appending Values */

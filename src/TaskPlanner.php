@@ -28,9 +28,9 @@ class TaskPlanner
     const DEVELOPMENT_ENVIRONMENT = 'DEVELOPMENT';
 
     /**
-     * @var TaskRunnerInterface
+     * @var TaskRunnerInterface|null
      */
-    protected TaskRunnerInterface $taskRunner;
+    protected ?TaskRunnerInterface $taskRunner = null;
 
     /**
      * @var integer
@@ -50,7 +50,7 @@ class TaskPlanner
 
     /**
      * Begin a new Task Chain
-     * @param Closure|string $task
+     * @param Closure|string|Command $task
      * @return $this
      */
     public function add(Closure|string|Command $task): static
@@ -426,7 +426,7 @@ class TaskPlanner
      * @param string $task
      * @return $this
      */
-    public function followedBy(string $task): static
+    public function followedBy(string|callable|Command $task): static
     {
         $this->getCurrentTask()->addFollowedBy($task);
         return $this;
@@ -569,7 +569,7 @@ class TaskPlanner
         $this->tasks[$task] = new Task($task);
         $this->setCurrentTask($task);
 
-        $this->getCurrentTask()->setName(
+        $this->getCurrentTask()->setCallable(
             ($body) ? $body : $task
         );
     }
