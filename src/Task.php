@@ -49,37 +49,37 @@ class Task
      * TaskBag constructor.
      * @param string $name // @todo: closure?
      * @param string|null $interval
-     * @param int|string|int[]|string[] $minute
-     * @param int|string|int[]|string[] $hour
-     * @param int|string|int[]|string[] $month
-     * @param int|string|int[]|string[] $day
-     * @param string|string[] $weekday
+     * @param int|string|int[]|string[] $minutes
+     * @param int|string|int[]|string[] $hours
+     * @param int|string|int[]|string[] $months
+     * @param int|string|int[]|string[] $days
+     * @param string|string[] $weekdays
      * @param string|string[] $environments
-     * @param string|string[] $followedBy
+     * @param string|string[] $followed_by
      */
     public function __construct(
         string           $name,
         string|null      $interval = null,
-        int|string|array $minute = [],
-        int|string|array $hour = [],
-        int|string|array $month = [],
-        int|string|array $day = [],
-        string|array     $weekday = [], // @todo: Enumeration
+        int|string|array $minutes = [],
+        int|string|array $hours = [],
+        int|string|array $months = [],
+        int|string|array $days = [],
+        string|array     $weekdays = [], // @todo: Enumeration
 
         string|array     $environments = [],
-        string|array     $followedBy = [],
+        string|array     $followed_by = [],
     )
     {
         $this->name = $name;
         $this->interval = $interval;
 
-        $this->minutes = $this->prepareAndValidateValues($minute);
-        $this->hours = $this->prepareAndValidateValues($hour);
-        $this->months = $this->prepareAndValidateValues($month);
-        $this->days = $this->prepareAndValidateValues($day);
-        $this->weekdays = $this->prepareAndValidateValues($weekday);
+        $this->minutes = $this->prepareAndValidateValues($minutes);
+        $this->hours = $this->prepareAndValidateValues($hours);
+        $this->months = $this->prepareAndValidateValues($months);
+        $this->days = $this->prepareAndValidateValues($days);
+        $this->weekdays = $this->prepareAndValidateValues($weekdays);
         $this->environments = $this->prepareAndValidateValues($environments);
-        $this->followedBy = $this->prepareAndValidateValues($followedBy);
+        $this->followedBy = $this->prepareAndValidateValues($followed_by);
     }
 
     /* Expressions */
@@ -275,7 +275,7 @@ class Task
      */
     public function addMinute(int|string $minute): static
     {
-        $this->minutes = array_merge($this->prepareAndValidateValues($minute), $this->getMinutes());
+        $this->minutes = array_merge($this->getMinutes(), $this->prepareAndValidateValues($minute));
         return $this;
     }
 
@@ -311,7 +311,7 @@ class Task
      */
     public function addHour(int|string $hour): static
     {
-        $this->hours = array_merge($this->prepareAndValidateValues($hour), $this->getHours());
+        $this->hours = array_merge($this->getHours(), $this->prepareAndValidateValues($hour));
         return $this;
     }
 
@@ -345,9 +345,9 @@ class Task
      * @param int|string $day
      * @return $this
      */
-    public function addDay(int|string $day): static
+    public function addDay(array|int|string $day): static
     {
-        $this->days = array_merge($this->prepareAndValidateValues($day), $this->getDays());
+        $this->days = array_merge($this->getDays(), $this->prepareAndValidateValues($day));
         return $this;
     }
 
@@ -378,12 +378,12 @@ class Task
     }
 
     /**
-     * @param string $weekday
+     * @param array|string $weekday
      * @return $this
      */
-    public function addWeekday(string $weekday): static
+    public function addWeekday(array|string $weekday): static
     {
-        $this->weekdays = array_merge($this->prepareAndValidateValues($weekday), $this->getWeekdays());
+        $this->weekdays = array_merge($this->getWeekdays(), $this->prepareAndValidateValues($weekday));
         return $this;
     }
 
@@ -414,12 +414,12 @@ class Task
     }
 
     /**
-     * @param string|int $month
+     * @param string|int|array $month
      * @return $this
      */
-    public function addMonth(string|int $month): static
+    public function addMonth(string|int|array $month): static
     {
-        $this->minutes = array_merge($this->prepareAndValidateValues($month), $this->getMonths());
+        $this->months = array_merge($this->getMonths(), $this->prepareAndValidateValues($month));
         return $this;
     }
 

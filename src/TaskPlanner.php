@@ -53,7 +53,7 @@ class TaskPlanner
      * @param Closure|string $task
      * @return $this
      */
-    public function add(Closure|string $task): static
+    public function add(Closure|string|Command $task): static
     {
         $body = null;
         if ($task instanceof Closure || $task instanceof Command) {

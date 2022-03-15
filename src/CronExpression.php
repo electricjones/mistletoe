@@ -10,11 +10,11 @@ use Cron\CronExpression as BaseCronExpression;
  */
 class CronExpression extends BaseCronExpression
 {
-    const MINUTE_KEY = 'minute';
-    const HOUR_KEY = 'hour';
-    const DAY_KEY = 'day';
-    const MONTH_KEY = 'month';
-    const WEEKDAY_KEY = 'weekday';
+    const MINUTE_KEY = 'minutes';
+    const HOUR_KEY = 'hours';
+    const DAY_KEY = 'days';
+    const MONTH_KEY = 'months';
+    const WEEKDAY_KEY = 'weekdays';
 
     /**
      * Builds an expression from the Task
@@ -28,8 +28,8 @@ class CronExpression extends BaseCronExpression
 
         if (static::onlyIntervalIsSet($task)) {
             return new static($task->getInterval());
-
         }
+
         // Get with defaults
         $parts[static::MINUTE_KEY] = static::getPartWithDefault($task, static::MINUTE_KEY);
         $parts[static::HOUR_KEY] = static::getPartWithDefault($task, static::HOUR_KEY);
@@ -48,7 +48,8 @@ class CronExpression extends BaseCronExpression
             $parts[static::HOUR_KEY] = '0';
         }
 
-        return new static(implode(' ', $parts));
+        $a = implode(' ', $parts);
+        return new static($a);
     }
 
     /**
@@ -59,10 +60,10 @@ class CronExpression extends BaseCronExpression
     static private function onlyIntervalIsSet(Task $task): bool
     {
         return $task->getInterval() !== null
-            && $task->getMonths() === null
-            && $task->getDays() === null
-            && $task->getMinutes() === null
-            && $task->getHours() === null;
+            && $task->getMonths() === []
+            && $task->getDays() === []
+            && $task->getMinutes() === []
+            && $task->getHours() === [];
     }
 
     /**
@@ -74,7 +75,7 @@ class CronExpression extends BaseCronExpression
     static private function getPartWithDefault(Task $task, string $part): string
     {
         $value = $task->{'get' . ucfirst($part)}();
-        if (!is_null($value)) {
+        if (!is_null($value) and !empty($value)) {
             return static::toPart($value);
         } else {
             return '*';
@@ -90,6 +91,10 @@ class CronExpression extends BaseCronExpression
     {
         if ($value === 0) {
             return '0';
+        }
+
+        if (is_array($value)) {
+            return implode(",", $value);
         }
 
         return (string)$value;

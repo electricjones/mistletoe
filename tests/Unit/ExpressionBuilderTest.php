@@ -79,13 +79,13 @@ class ExpressionBuilderTest extends TestCase
     /** @test */
     public function it_handles_some_complex_scenarios()
     {
-        /* Scenario: Every day at 7:20 */
-        $task = new Task([
-            'name'     => 'Task',
-            'interval' => '@daily',
-            'hour'     => 7,
-            'minute'   => 20
-        ]);
+        /* Scenario: Every days at 7:20 */
+        $task = new Task(
+            name: 'Task',
+            interval: '@daily',
+            minutes: '20',
+            hours: 7
+        );
 
         $actual = CronExpression::from($task);
         $expected = new CronExpression('20 7 * * *');
@@ -93,27 +93,27 @@ class ExpressionBuilderTest extends TestCase
         $this->assertEquals($expected, $actual, "failed to build from the first scenario");
 
         /* Scenario: Every Thursday, Sat, and Sun in June at noon */
-        $task = new Task([
-            'name'    => 'Task',
-            'hour'    => 12,
-            'minute'  => 00,
-            'weekday' => '4,6,0',
-            'month'   => 6
-        ]);
+        $task = new Task(
+            name: 'Task',
+            minutes: 00,
+            hours: 12,
+            months: 6,
+            weekdays: [4, '6', '0'],
+        );
 
         $actual = CronExpression::from($task);
         $expected = new CronExpression('0 12 * 6 4,6,0');
 
-        $this->assertEquals($expected, $actual, "failed to build from the weekday scenario");
+        $this->assertEquals($expected, $actual, "failed to build from the weekdays scenario");
 
-        /* Scenario: on the 15 on every month at 15:30 */
-        $task = new Task([
-            'name'     => 'TaskTwo',
-            'interval' => '@monthly',
-            'hour'     => '15',
-            'minute'   => 30,
-            'day'      => 12
-        ]);
+        /* Scenario: on the 15 on every months at 15:30 */
+        $task = new Task(
+            name: 'TaskTwo',
+            interval: '@monthly',
+            minutes: 30,
+            hours: '15',
+            days: 12
+        );
 
         $actual = CronExpression::from($task);
         $expected = new CronExpression('30 15 12 * *');
@@ -121,28 +121,28 @@ class ExpressionBuilderTest extends TestCase
         $this->assertEquals($expected, $actual, "failed to build from the second scenario");
 
         /* Scenario: Malformed request */
-        $task = new Task([
-            'name'     => 'TaskThree',
-            'interval' => '@monthly', // this should be ignored...
-            'hour'     => 0,
-            'minute'   => 24,
-            'day'      => 1,
-            'month'    => 7 // ... because of this
-        ]);
+        $task = new Task(
+            name: 'TaskThree',
+            interval: '@monthly', // this should be ignored...
+            minutes: 24,
+            hours: 0,
+            months: 7,
+            days: 1 // ... because of this
+        );
 
         $actual = CronExpression::from($task);
         $expected = new CronExpression('24 0 1 7 *');
 
         $this->assertEquals($expected, $actual, "failed to build from the third scenario");
 
-        /* Complex: “At every 30 and 59th minute past the 1, 4 and 8th hour on the 2, 4, 9 and 10th in Jan, Mar and Sep.” */
-        $task = new Task([
-            'name'   => 'TaskThree',
-            'minute' => '30,59',
-            'hour'   => '1,4,8',
-            'day'    => '2,4,9',
-            'month'  => '1,3,9'
-        ]);
+        /* Complex: “At every 30 and 59th minutes past the 1, 4 and 8th hours on the 2, 4, 9 and 10th in Jan, Mar and Sep.” */
+        $task = new Task(
+            name: 'TaskThree',
+            minutes: ['30', '59'],
+            hours: ['1', 4, '8'],
+            months: ['1', '3', 9],
+            days: [2, 4, 9]
+        );
 
         $actual = CronExpression::from($task);
         $expected = new CronExpression('30,59 1,4,8 2,4,9 1,3,9 *');

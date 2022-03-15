@@ -22,7 +22,7 @@ class TaskTest extends TestCase
         $task = new Task('Task');
         $task->addMonth(1)->addMonth(2)->addMonth(3);
 
-        $this->assertEquals('1,2,3', $task->getMonths(), 'failed to append months');
+        $this->assertEquals(['1', '2', '3'], $task->getMonths(), 'failed to append months');
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class TaskTest extends TestCase
         $task = new Task('Task');
         $task->addDay(1)->addDay(2)->addDay(3);
 
-        $this->assertEquals('1,2,3', $task->getDays(), 'failed to append day');
+        $this->assertEquals(['1', '2', '3'], $task->getDays(), 'failed to append day');
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class TaskTest extends TestCase
         $task = new Task('Task');
         $task->addHour(1)->addHour(2)->addHour(3);
 
-        $this->assertEquals('1,2,3', $task->getHours(), 'failed to append hours');
+        $this->assertEquals(['1', '2', '3'], $task->getHours(), 'failed to append hours');
     }
 
     /** @test */
@@ -49,31 +49,7 @@ class TaskTest extends TestCase
         $task = new Task('Task');
         $task->addMinute(1)->addMinute(2)->addMinute(3);
 
-        $this->assertEquals('1,2,3', $task->getMinutes(), 'failed to append minutes');
-    }
-
-    /** @test */
-    public function TestConstructNewBagWithParameters()
-    {
-        $task = new Task(
-            name: 'name',
-            interval: 'int',
-            minute: 'minute',
-            hour: 'hour',
-            month: 'month',
-            day: 'day',
-            environments: ['env'],
-            followedBy: ['one', 'two']
-        );
-
-        $this->assertEquals('name', $task->getName(), 'failed to set task name');
-        $this->assertEquals(['env'], $task->getEnvironments(), 'failed to set environments');
-        $this->assertEquals(['one', 'two'], $task->getFollowedBy(), 'failed to set followed by');
-        $this->assertEquals('int', $task->getInterval(), 'failed to set interval');
-        $this->assertEquals('hour', $task->getHours(), 'failed to set hour');
-        $this->assertEquals('minute', $task->getMinutes(), 'failed to set minute');
-        $this->assertEquals('month', $task->getMonths(), 'failed to set month');
-        $this->assertEquals('day', $task->getDays(), 'failed to set day');
+        $this->assertEquals(['1', '2', '3'], $task->getMinutes(), 'failed to append minutes');
     }
 
     /** @test */
@@ -84,7 +60,6 @@ class TaskTest extends TestCase
         $expression = new CronExpression('1 2 3 4 5');
         $task->setCronExpression($expression);
         $this->assertEquals(new CronExpression('1 2 3 4 5'), $task->getCronExpression(), 'failed to set cron expression from instance');
-
     }
 
     /** @test */
