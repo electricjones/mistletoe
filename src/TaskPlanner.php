@@ -201,7 +201,7 @@ class TaskPlanner
      */
     public function atMidnight(): static
     {
-        return $this->at('24:00');
+        return $this->at('00:00');
     }
 
     /**

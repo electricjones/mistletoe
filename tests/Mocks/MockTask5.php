@@ -3,7 +3,7 @@ namespace ElectricJones\Mistletoe\Test\Mocks;
 
 class MockTask5 extends BaseMock
 {
-    public function run()
+    public function run(): void
     {
         $this->doRun('5');
     }

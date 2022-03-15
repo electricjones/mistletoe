@@ -13,5 +13,5 @@ abstract class BaseMock implements RunnableInterface
         fclose($myfile);
     }
 
-    abstract public function run();
+    abstract public function run(): void;
 }

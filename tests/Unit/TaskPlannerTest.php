@@ -216,7 +216,7 @@ class TaskPlannerTest extends TestCase
         $expected = [
             'SomeTask'    => (new Task('SomeTask'))->setInterval('@yearly')->setDays(12)->setMonths(7)->setTime('24:00')->setEnvironments(TaskPlanner::PRODUCTION_ENVIRONMENT)->setFollowedBy(['Task2', 'Task3']),
             'AnotherTask' => (new Task('AnotherTask'))->setInterval('@daily')->setTime('13:14')->addEnvironment('STAGING'),
-            'ThirdTask' => (new Task('ThirdTask'))->setWeekdays([0, 6])->setMonths(['2', 4, '6'])->setTime('13:14')
+            'ThirdTask' => (new Task('ThirdTask'))->setWeekdays([6, 0])->setMonths(['2', 4, '6'])->setTime('13:14')
         ];
 
         $this->assertEquals($expected, $planner->getTasks(), 'failed to create complex bags');

@@ -306,10 +306,10 @@ class Task
     }
 
     /**
-     * @param int|string $hour
+     * @param array|int|string $hour
      * @return $this
      */
-    public function addHour(int|string $hour): static
+    public function addHour(array|int|string $hour): static
     {
         $this->hours = array_merge($this->getHours(), $this->prepareAndValidateValues($hour));
         return $this;
