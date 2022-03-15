@@ -1,8 +1,7 @@
-- todo: PHP 8.1
-- Enums: Days, Environments, 'ly's
 - todo: Parse Annotated Classes
 - Separate processes (configurable)
 - Tests
+- documentation, repository
 
 # Mistletoe (PHP Cron Tasks)
 
