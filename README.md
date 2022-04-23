@@ -188,7 +188,7 @@ If you discover any security related issues, please email :author_email instead 
 ## Credits
 
 - [Michael Wilson](http://github.com/chrismichaels84)
-- Special Thanks to [FBS](http://flexmls.com/)
+- Special Thanks to [FBS](http://wearefbs.com/)
 
 ## License
 
