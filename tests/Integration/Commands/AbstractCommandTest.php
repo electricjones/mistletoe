@@ -1,18 +1,18 @@
-<?php namespace Mistletoe\Test\Integration\Commands;
+<?php namespace ElectricJones\Mistletoe\Test\Integration\Commands;
 
-use Mistletoe\Application\Commands\AbstractCommand;
-use Mistletoe\Application\Commands\ListAllCommand;
-use Mistletoe\TaskPlanner;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\Application\Commands\AbstractCommand;
+use ElectricJones\Mistletoe\Application\Commands\ListAllCommand;
+use ElectricJones\Mistletoe\TaskPlanner;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class AbstractCommandTest extends PHPUnit_Framework_TestCase
+class AbstractCommandTest extends TestCase
 {
     static $original_dir;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         static::$original_dir = __DIR__ . "/../../..";
     }

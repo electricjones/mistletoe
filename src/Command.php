@@ -1,4 +1,4 @@
-<?php namespace Mistletoe;
+<?php namespace ElectricJones\Mistletoe;
 
 /**
  * Class Command
@@ -6,18 +6,17 @@
  */
 class Command
 {
-    private $command;
+    private mixed $command;
 
     public function __construct($command)
     {
-
         $this->command = $command;
     }
 
     /**
      * @return mixed
      */
-    public function getCommand()
+    public function getCommand(): mixed
     {
         return $this->command;
     }
@@ -25,7 +24,7 @@ class Command
     /**
      * @param mixed $command
      */
-    public function setCommand($command)
+    public function setCommand(mixed $command)
     {
         $this->command = $command;
     }

@@ -1,9 +1,9 @@
 <?php
-namespace Mistletoe\Test\Mocks;
+namespace ElectricJones\Mistletoe\Test\Mocks;
 
 class MockTask4 extends BaseMock
 {
-    public function run()
+    public function run(): void
     {
         $this->doRun('4');
     }

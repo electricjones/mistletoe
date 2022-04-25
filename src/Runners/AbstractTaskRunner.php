@@ -1,7 +1,10 @@
 <?php
-namespace Mistletoe\Runners;
-use Mistletoe\Contracts\TaskRunnerInterface;
-use Mistletoe\TaskBag;
+namespace ElectricJones\Mistletoe\Runners;
+
+use DateTime;
+use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
+use ElectricJones\Mistletoe\Task;
+use Exception;
 
 /**
  * Class AbstractTaskRunner
@@ -12,22 +15,22 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     /**
      * @var array of TaskBags
      */
-    private $taskBags;
+    private array $taskBags;
 
     /**
      * @var string
      */
-    private $currentTime = 'now';
+    private string $currentTime = 'now';
 
     /**
      * @var string
      */
-    protected $currentEnvironment;
+    protected string $currentEnvironment;
 
     /**
      * @var bool
      */
-    protected $testing = false;
+    protected bool $testing = false;
 
     /**
      * TaskRunner constructor.
@@ -39,19 +42,19 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getCurrentTime()
+    public function getCurrentTime(): static
     {
         return $this->currentTime;
     }
 
     /**
-     * @param string|\DateTime $currentTime
+     * @param DateTime|string $currentTime
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
-    public function setCurrentTime($currentTime)
+    public function setCurrentTime(DateTime|string $currentTime): static
     {
         //if (!is_string($currentTime)) {
         //    throw new \Exception("Current time must be a string");
@@ -64,7 +67,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     /**
      * @return string
      */
-    public function getCurrentEnvironment()
+    public function getCurrentEnvironment(): string
     {
         return $this->currentEnvironment;
     }
@@ -73,7 +76,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
      * @param string $currentEnvironment
      * @return $this
      */
-    public function setCurrentEnvironment($currentEnvironment)
+    public function setCurrentEnvironment(string $currentEnvironment): static
     {
         $this->currentEnvironment = $currentEnvironment;
         return $this;
@@ -82,18 +85,18 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     /**
      * Returns an array of currently due tasks
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getDueTasks()
+    public function getDueTasks(): array
     {
         $dueTasks = [];
         foreach ($this->taskBags as $taskName => $task) {
-            if (!$task instanceof TaskBag) {
-                throw new \Exception("Tasks must be instances of TaskBag");
+            if (!$task instanceof Task) {
+                throw new Exception("Tasks must be instances of TaskBag");
             }
 
             if ($task->isDue($this->currentTime)) {
-                if (in_array($this->currentEnvironment, $task->getEnvironments())) {
+                if ($task->getEnvironments() === [] or in_array($this->currentEnvironment, $task->getEnvironments())) {
                     $dueTasks[$taskName] = $task;
                 }
             }
@@ -106,61 +109,61 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     /**
      * Force run every registered task
      * @return bool
+     * @todo: return a more appropriate status object
      */
-    public function runAllTasks()
+    public function runAllTasks(): bool
     {
         $tasks = $this->taskBags;
-        $success = $this->executeTasks($tasks);
-
-        return $success;
+        return $this->executeTasks($tasks);
     }
 
     /**
      * Run the tasks that are due right now
      * @return bool
-     * @throws \Exception
+     * @throws Exception
+     * @todo: return a more appropriate status object
      */
-    public function runDueTasks()
+    public function runDueTasks(): bool
     {
         $tasks = $this->getDueTasks();
-        $success = $this->executeTasks($tasks);
-
-        return $success;
+        return $this->executeTasks($tasks);
     }
 
     /**
      * Run a specific task
      * @param $task
+     * @todo: return a more appropriate status object
      * @return bool
      */
-    public function runTask($task)
+    public function runTask($task): bool
     {
         $tasks = [
             $task => $this->taskBags[$task]
         ];
-        $success = $this->executeTasks($tasks);
-
-        return $success;
+        return $this->executeTasks($tasks);
     }
 
     /**
      * Run multiple specific tasks
      * @param array $tasks
+     * @todo: return a more appropriate status object
      * @return bool
      */
-    public function runTasks(array $tasks)
+    public function runTasks(array $tasks): bool
     {
         $list = [];
         foreach ($tasks as $task) {
             $list[$task] = $this->taskBags[$task];
         }
 
-        $success = $this->executeTasks($list);
-
-        return $success;
+        return $this->executeTasks($list);
     }
 
-    public function flagForTesting($switch = false)
+    /**
+     * @param bool $switch
+     * @return $this
+     */
+    public function flagForTesting(bool $switch = false): static
     {
         $this->testing = $switch;
         return $this;
@@ -169,7 +172,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
     /**
      * @return array
      */
-    public function getTaskBags()
+    public function getTaskBags(): array
     {
         return $this->taskBags;
     }
@@ -178,7 +181,7 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
      * @param array $taskBags
      * @return $this
      */
-    public function setTaskBags($taskBags)
+    public function setTaskBags($taskBags): static
     {
         $this->taskBags = $taskBags;
         return $this;
@@ -188,5 +191,5 @@ abstract class AbstractTaskRunner implements TaskRunnerInterface
      * @param array $tasks
      * @return mixed
      */
-    abstract protected function executeTasks(array $tasks);
+    abstract protected function executeTasks(array $tasks): mixed;
 }

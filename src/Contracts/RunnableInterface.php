@@ -1,5 +1,6 @@
 <?php
-namespace Mistletoe\Contracts;
+
+namespace ElectricJones\Mistletoe\Contracts;
 
 /**
  * Class RunnableInterface
@@ -7,5 +8,6 @@ namespace Mistletoe\Contracts;
  */
 interface RunnableInterface
 {
-    public function run();
+    // @todo: any callable
+    public function run(): void;
 }

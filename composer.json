@@ -1,41 +1,39 @@
 {
-    "name": "michaels/mistletoe",
+    "name": "electricjones/mistletoe",
     "type": "library",
     "description": "Cron and Single Use Task Management for PHP.",
     "keywords": [
         "cron",
         "tasks"
     ],
-    "homepage": "https://github.com/michaels/mistletoe",
+    "homepage": "https://github.com/electricjones/mistletoe",
     "license": "MIT",
     "authors": [
         {
             "name": "Michael Wilson",
-            "email": "chrismichaels84@gmail.com",
+            "email": "mwilson@electricjones.me",
             "role": "Developer"
         }
     ],
     "require": {
-      "php": "~5.5|~7.0",
-      "symfony/console": "~3.0",
-      "mtdowling/cron-expression": "1.*"
+        "php": ">=8.1",
+        "symfony/console": "^6.0",
+        "dragonmantank/cron-expression": "^3.3"
     },
     "require-dev": {
-      "phpunit/phpunit": "~5.0",
-      "scrutinizer/ocular": "~1.1",
-      "squizlabs/php_codesniffer": "~2.3"
+        "phpunit/phpunit": "^9.5"
     },
-  "bin": [
-    "bin/mt"
-  ],
+    "bin": [
+        "bin/mt"
+    ],
     "autoload": {
         "psr-4": {
-            "Mistletoe\\": "src"
+            "ElectricJones\\Mistletoe\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mistletoe\\Test\\": "tests"
+            "ElectricJones\\Mistletoe\\Test\\": "tests"
         }
     },
     "scripts": {

@@ -1,6 +1,8 @@
 <?php
-namespace Mistletoe\Application\Commands;
 
+namespace ElectricJones\Mistletoe\Application\Commands;
+
+use Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListDueCommand extends AbstractCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('list:due')
@@ -19,7 +21,10 @@ class ListDueCommand extends AbstractCommand
             ->addArgument('path', InputArgument::OPTIONAL, "Where is your Mistletoe Project File?");;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @throws Exception
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $planner = $this->getTaskPlanner($input->getArgument('path'));
         $dueTasks = $planner->getDueTasks();

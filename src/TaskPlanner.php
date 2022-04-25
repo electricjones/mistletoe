@@ -1,7 +1,10 @@
 <?php
-namespace Mistletoe;
-use Mistletoe\Contracts\TaskRunnerInterface;
-use Mistletoe\Runners\GenericTaskRunner;
+namespace ElectricJones\Mistletoe;
+
+use Closure;
+use ElectricJones\Mistletoe\Contracts\TaskRunnerInterface;
+use ElectricJones\Mistletoe\Runners\GenericTaskRunner;
+use Exception;
 
 /**
  * Class TaskPlanner
@@ -10,50 +13,50 @@ use Mistletoe\Runners\GenericTaskRunner;
 class TaskPlanner
 {
     /** @var array Tasks currently scheduled */
-    protected $tasks = [];
+    protected array $tasks = [];
 
-    /** @var  TaskBag */
-    protected $currentTask;
+    /** @var  Task */
+    protected Task $currentTask;
 
     /** @var  string Namespace prefix */
-    protected $nsPrefix = '';
+    protected string $nsPrefix = '';
 
-    protected $currentEnvironment = self::PRODUCTION_ENVIRONMENT;
+    protected string $currentEnvironment = self::PRODUCTION_ENVIRONMENT;
 
     /* Environment Constants */
     const PRODUCTION_ENVIRONMENT = 'PRODUCTION';
     const DEVELOPMENT_ENVIRONMENT = 'DEVELOPMENT';
 
     /**
-     * @var \Mistletoe\Contracts\TaskRunnerInterface
+     * @var TaskRunnerInterface|null
      */
-    protected $taskRunner;
+    protected ?TaskRunnerInterface $taskRunner = null;
 
     /**
      * @var integer
      */
-    protected $closureIncrement = 0;
+    protected int $closureIncrement = 0;
 
     /**
      * @var string
      */
-    protected $currentTime;
+    protected string $currentTime;
 
     /**
      * @var bool
      */
-    protected $testing = false;
+    protected bool $testing = false;
 
 
     /**
      * Begin a new Task Chain
-     * @param string|\Closure $task
+     * @param Closure|string|Command $task
      * @return $this
      */
-    public function add($task)
+    public function add(Closure|string|Command $task): static
     {
         $body = null;
-        if ($task instanceof \Closure || $task instanceof Command) {
+        if ($task instanceof Closure || $task instanceof Command) {
             $body = $task;
             $task = $this->getNextClosureIncrement();
         }
@@ -68,13 +71,13 @@ class TaskPlanner
      * @param string $expression
      * @return $this
      */
-    public function schedule($expression)
+    public function schedule(string $expression): static
     {
         $this->getCurrentTask()->setCronExpression($expression);
         return $this;
     }
 
-    public function always()
+    public function always(): static
     {
         return $this->schedule('* * * * *');
     }
@@ -83,7 +86,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function yearly()
+    public function yearly(): static
     {
         $this->getCurrentTask()->setInterval('@yearly');
         return $this;
@@ -92,7 +95,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function annually()
+    public function annually(): static
     {
         return $this->yearly();
     }
@@ -100,7 +103,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function monthly()
+    public function monthly(): static
     {
         $this->getCurrentTask()->setInterval('@monthly');
         return $this;
@@ -109,7 +112,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function weekly()
+    public function weekly(): static
     {
         $this->getCurrentTask()->setInterval('@weekly');
         return $this;
@@ -118,7 +121,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function daily()
+    public function daily(): static
     {
         $this->getCurrentTask()->setInterval('@daily');
         return $this;
@@ -127,7 +130,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function hourly()
+    public function hourly(): static
     {
         $this->getCurrentTask()->setInterval('@hourly');
         return $this;
@@ -135,26 +138,26 @@ class TaskPlanner
 
     /* Time intervals */
 
-    public function everyXHours($hrs)
+    public function everyXHours($hrs): static
     {
-        $this->getCurrentTask()->setHour("*/{$hrs}");
+        $this->getCurrentTask()->setHours("*/{$hrs}");
         return $this;
     }
 
-    public function everyXMinutes($mins)
+    public function everyXMinutes($mins): static
     {
-        $this->getCurrentTask()->setMinute("*/{$mins}");
+        $this->getCurrentTask()->setMinutes("*/{$mins}");
         return $this;
     }
 
-    /* @todo: this could be cleaned up and expanded for minutes, hours, days, and weeks
-     * @param $name
+    /* @param $name
      * @param $arguments
-     * @return
+     * @return mixed
+     * @todo: this could be cleaned up and expanded for minutes, hours, days, and weeks
      */
     public function __call($name, $arguments)
     {
-        if (strpos($name, 'every') === false) {
+        if (!str_contains($name, 'every')) {
             throw new \BadMethodCallException("{$name} is not a valid method. Did you mean everyXHours? or everyXMinutes()?");
         }
 
@@ -187,7 +190,7 @@ class TaskPlanner
      * @param string $time
      * @return $this
      */
-    public function at($time)
+    public function at(string $time): static
     {
         $this->getCurrentTask()->addTime($time);
         return $this;
@@ -196,129 +199,129 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function atMidnight()
+    public function atMidnight(): static
     {
-        return $this->at('24:00');
+        return $this->at('00:00');
     }
 
     /**
      * @return TaskPlanner
      */
-    public function atNoon()
+    public function atNoon(): static
     {
         return $this->at('12:00');
     }
 
     /**
-     * @param string|array|integer $minute
+     * @param integer|array|string $minute
      * @return $this
      */
-    public function atMinute($minute)
+    public function atMinute(int|array|string $minute): static
     {
         $this->getCurrentTask()->addMinute($minute);
         return $this;
     }
 
     /**
-     * @param string|array|integer $minute
+     * @param integer|array|string $minute
      * @return TaskPlanner
      */
-    public function andAtMinute($minute)
+    public function andAtMinute(int|array|string $minute): static
     {
         return $this->atMinute($minute);
     }
 
     /**
-     * @param string|array|integer $hour
+     * @param integer|array|string $hour
      * @return $this
      */
-    public function atHour($hour)
+    public function atHour(int|array|string $hour): static
     {
         $this->getCurrentTask()->addHour($hour);
         return $this;
     }
 
     /**
-     * @param string|array|integer $hour
+     * @param integer|array|string $hour
      * @return TaskPlanner
      */
-    public function andAtHour($hour)
+    public function andAtHour(int|array|string $hour): static
     {
         return $this->atHour($hour);
     }
 
     /**
-     * @param string|array|integer $date
+     * @param integer|array|string $date
      * @return $this
      */
-    public function on($date)
+    public function on(int|array|string $date): static
     {
         $this->getCurrentTask()->addDate($date);
         return $this;
     }
 
     /**
-     * @param string|array|integer $date
+     * @param integer|array|string $date
      * @return TaskPlanner
      */
-    public function andOn($date)
+    public function andOn(int|array|string $date): static
     {
         return $this->on($date);
     }
 
     /**
-     * @param string|array|integer $day
+     * @param integer|array|string $day
      * @return $this
      */
-    public function onDay($day)
+    public function onDay(int|array|string $day): static
     {
         $this->getCurrentTask()->addDay($day);
         return $this;
     }
 
     /**
-     * @param string|array|integer $day
+     * @param integer|array|string $day
      * @return TaskPlanner
      */
-    public function andOnDay($day)
+    public function andOnDay(int|array|string $day): static
     {
         return $this->onDay($day);
     }
 
     /**
-     * @param string|array|integer $month
+     * @param integer|array|string $month
      * @return $this
      */
-    public function onMonth($month)
+    public function onMonth(int|array|string $month): static
     {
         $this->getCurrentTask()->addMonth($month);
         return $this;
     }
 
     /**
-     * @param string|array|integer $month
+     * @param integer|array|string $month
      * @return TaskPlanner
      */
-    public function andOnMonth($month)
+    public function andOnMonth(int|array|string $month): static
     {
         return $this->onMonth($month);
     }
 
     /**
-     * @param string|array|integer $weekday
+     * @param integer|array|string $weekday
      * @return $this
      */
-    public function onWeekday($weekday)
+    public function onWeekday(int|array|string $weekday): static
     {
         $this->getCurrentTask()->addWeekday($weekday);
         return $this;
     }
 
     /**
-     * @param string|array|integer $weekday
+     * @param integer|array|string $weekday
      * @return TaskPlanner
      */
-    public function andOnWeekday($weekday)
+    public function andOnWeekday(int|array|string $weekday): static
     {
         return $this->onWeekday($weekday);
     }
@@ -326,7 +329,7 @@ class TaskPlanner
     /**
      * @return $this
      */
-    public function onSunday()
+    public function onSunday(): static
     {
         return $this->onWeekday(0);
     }
@@ -334,7 +337,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onMonday()
+    public function onMonday(): static
     {
         return $this->onWeekday(1);
     }
@@ -342,7 +345,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onTuesday()
+    public function onTuesday(): static
     {
         return $this->onWeekday(2);
     }
@@ -350,7 +353,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onWednesday()
+    public function onWednesday(): static
     {
         return $this->onWeekday(3);
     }
@@ -358,7 +361,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onThursday()
+    public function onThursday(): static
     {
         return $this->onWeekday(4);
     }
@@ -366,7 +369,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onFriday()
+    public function onFriday(): static
     {
         return $this->onWeekday(5);
     }
@@ -374,7 +377,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onSaturday()
+    public function onSaturday(): static
     {
         return $this->onWeekday(6);
     }
@@ -385,15 +388,15 @@ class TaskPlanner
      * @param string $environment
      * @return $this
      */
-    public function onEnvironment($environment)
+    public function onEnvironment(string $environment): static
     {
         $this->getCurrentTask()->addEnvironment(strtoupper($environment));
         return $this;
     }
 
-    public function setEnvironments(array $environment)
+    public function setEnvironments(array $environment): static
     {
-        array_map(function($value) {
+        array_map(function ($value) {
             return strtoupper($value);
         }, $environment);
 
@@ -405,7 +408,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onProductionOnly()
+    public function onProductionOnly(): static
     {
         return $this->setEnvironments([static::PRODUCTION_ENVIRONMENT]);
     }
@@ -414,7 +417,7 @@ class TaskPlanner
     /**
      * @return TaskPlanner
      */
-    public function onDevelopmentOnly()
+    public function onDevelopmentOnly(): static
     {
         return $this->setEnvironments([static::DEVELOPMENT_ENVIRONMENT]);
     }
@@ -423,7 +426,7 @@ class TaskPlanner
      * @param string $task
      * @return $this
      */
-    public function followedBy($task)
+    public function followedBy(string|callable|Command $task): static
     {
         $this->getCurrentTask()->addFollowedBy($task);
         return $this;
@@ -432,16 +435,18 @@ class TaskPlanner
     /* Running Tasks */
     /**
      * @return bool
+     * @throws Exception
      */
-    public function runDueTasks()
+    public function runDueTasks(): bool
     {
         return $this->getTaskRunner()->runDueTasks();
     }
 
     /**
      * @return bool
+     * @throws Exception
      */
-    public function runAllTasks()
+    public function runAllTasks(): bool
     {
         return $this->getTaskRunner()->runAllTasks();
     }
@@ -449,8 +454,9 @@ class TaskPlanner
     /**
      * @param $task
      * @return bool
+     * @throws Exception
      */
-    public function runTask($task)
+    public function runTask($task): bool
     {
         return $this->getTaskRunner()->runTask($task);
     }
@@ -458,27 +464,29 @@ class TaskPlanner
     /**
      * @param array $tasks
      * @return bool
+     * @throws Exception
      */
-    public function runTasks(array $tasks)
+    public function runTasks(array $tasks): bool
     {
         return $this->getTaskRunner()->runTasks($tasks);
     }
 
     /* Getters and Setters */
     /**
-     * @param \Mistletoe\Contracts\TaskRunnerInterface $runner
+     * @param TaskRunnerInterface $runner
      * @return $this
      */
-    public function setTaskRunner(TaskRunnerInterface $runner)
+    public function setTaskRunner(TaskRunnerInterface $runner): static
     {
         $this->taskRunner = $runner;
         return $this;
     }
 
     /**
-     * @return TaskRunnerInterface
+     * @return TaskRunnerInterface|GenericTaskRunner
+     * @throws Exception
      */
-    public function getTaskRunner()
+    public function getTaskRunner(): TaskRunnerInterface|GenericTaskRunner
     {
         $runner = $this->taskRunner ?: (new GenericTaskRunner($this->tasks));
         $runner
@@ -493,21 +501,24 @@ class TaskPlanner
     /**
      * @return array
      */
-    public function getTasks()
+    public function getTasks(): array
     {
         return $this->tasks;
     }
 
     /**
      * @param string $name
-     * @return TaskBag
+     * @return Task
      */
-    public function getTask($name)
+    public function getTask(string $name): Task
     {
         return $this->tasks[$name];
     }
 
-    public function getDueTasks()
+    /**
+     * @throws Exception
+     */
+    public function getDueTasks(): array
     {
         return $this->getTaskRunner()->getDueTasks();
     }
@@ -515,7 +526,7 @@ class TaskPlanner
     /**
      * @return string
      */
-    public function getNsPrefix()
+    public function getNsPrefix(): string
     {
         return $this->nsPrefix;
     }
@@ -524,7 +535,7 @@ class TaskPlanner
      * @param string $nsPrefix
      * @return $this
      */
-    public function setNsPrefix($nsPrefix)
+    public function setNsPrefix(string $nsPrefix): static
     {
         $this->nsPrefix = $nsPrefix;
         return $this;
@@ -533,7 +544,7 @@ class TaskPlanner
     /**
      * @return string
      */
-    public function getCurrentEnvironment()
+    public function getCurrentEnvironment(): string
     {
         return $this->currentEnvironment;
     }
@@ -542,7 +553,7 @@ class TaskPlanner
      * @param string $currentEnvironment
      * @return $this
      */
-    public function setCurrentEnvironment($currentEnvironment)
+    public function setCurrentEnvironment(string $currentEnvironment): static
     {
         $this->currentEnvironment = strtoupper($currentEnvironment);
         return $this;
@@ -551,14 +562,14 @@ class TaskPlanner
     /* Internal Methods */
     /**
      * @param string $task
-     * @param \Closure|null $body
+     * @param Closure|null $body
      */
-    protected function createNewTask($task, $body = null)
+    protected function createNewTask(string $task, Closure $body = null)
     {
-        $this->tasks[$task] = new TaskBag($task);
+        $this->tasks[$task] = new Task($task);
         $this->setCurrentTask($task);
 
-        $this->getCurrentTask()->setTask(
+        $this->getCurrentTask()->setCallable(
             ($body) ? $body : $task
         );
     }
@@ -566,15 +577,15 @@ class TaskPlanner
     /**
      * @param string $task
      */
-    protected function setCurrentTask($task)
+    protected function setCurrentTask(string $task)
     {
         $this->currentTask = $this->tasks[$task];
     }
 
     /**
-     * @return TaskBag
+     * @return Task
      */
-    protected function getCurrentTask()
+    protected function getCurrentTask(): Task
     {
         return $this->currentTask;
     }
@@ -582,7 +593,7 @@ class TaskPlanner
     /**
      * @return null|string
      */
-    private function getNextClosureIncrement()
+    private function getNextClosureIncrement(): ?string
     {
         $this->closureIncrement++;
         return "_task{$this->closureIncrement}";
@@ -591,7 +602,7 @@ class TaskPlanner
     /**
      * @return string
      */
-    public function getCurrentTime()
+    public function getCurrentTime(): string
     {
         return $this->currentTime;
     }
@@ -600,7 +611,7 @@ class TaskPlanner
      * @param mixed $currentTime
      * @return $this
      */
-    public function setCurrentTime($currentTime)
+    public function setCurrentTime(mixed $currentTime): static
     {
         $this->currentTime = $currentTime;
         return $this;

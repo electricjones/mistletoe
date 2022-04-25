@@ -1,67 +1,60 @@
-<?php namespace Mistletoe\Test\Unit;
+<?php namespace ElectricJones\Mistletoe\Test\Unit;
 
-use Cron\CronExpression;
-use Mistletoe\Command;
-use Mistletoe\Runners\GenericTaskRunner as TaskRunner;
-use Mistletoe\TaskBag;
-use Mistletoe\Test\Mocks\MockTask1;
-use Mistletoe\Test\Mocks\MockTask2;
-use Mistletoe\Test\Mocks\MockTask3;
-use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use ElectricJones\Mistletoe\Command;
+use ElectricJones\Mistletoe\CronExpression;
+use ElectricJones\Mistletoe\Runners\GenericTaskRunner as TaskRunner;
+use ElectricJones\Mistletoe\Task;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask1;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask2;
+use ElectricJones\Mistletoe\Test\Mocks\MockTask3;
+use PHPUnit\Framework\TestCase;
 
-class TaskRunnerTest extends PHPUnit_Framework_TestCase
+
+class TaskRunnerTest extends TestCase
 {
     protected $taskBags;
     protected $closureTask1;
     protected $closureTask2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->closureTask1 = new Command('sleep 12');
-        $this->closureTask2 = function() {};
+        $this->closureTask2 = function () {
+        };
 
         $this->taskBags = [
-            MockTask1::class => new TaskBag([ // is due
-                'task' => MockTask1::class,
-                'cronExpression' => CronExpression::factory('30 12 1 1 *'),
-                'environments' => ['PRODUCTION']
-            ]),
+            MockTask1::class => (new Task( // is due
+                name: MockTask1::class,
+                environments: ['PRODUCTION'],
+            ))->setCronExpression(new CronExpression('30 12 1 1 *')),
 
-            MockTask2::class => new TaskBag([
-                'task' => MockTask2::class,
-                'cronExpression' => CronExpression::factory('45 * * * *'),
-                'environments' => ['PRODUCTION', 'DEVELOPMENT']
-            ]),
+            MockTask2::class => (new Task(
+                name: MockTask2::class,
+                environments: ['PRODUCTION', 'DEVELOPMENT']
+            ))->setCronExpression(new CronExpression('45 * * * *')),
 
-            MockTask3::class => new TaskBag([  // is due, on all environments by default
-                'task' => MockTask3::class,
-                'cronExpression' => CronExpression::factory('30 * * * *')
-            ]),
+            MockTask3::class => (new Task(  // is due, on all environments by default
+                name: MockTask3::class,
+            ))->setCronExpression(new CronExpression('30 * * * *')),
 
             // @todo: closure tasks do not work with FlexTaskRunner yet, but Command()s do
-            '_task0' => new TaskBag([ // is due
-                'task' => $this->closureTask1,
-                'cronExpression' => CronExpression::factory('1,30 4,8,12 * 1,6,12 *'),
-                'environments' => ['PRODUCTION']
-            ]),
+            '_task0'         => (new Task( // is due
+//                name: $this->closureTask1,
+                name: 'temporary',
+                environments: ['PRODUCTION']
+            ))->setCronExpression(new CronExpression('1,30 4,8,12 * 1,6,12 *')),
+            //
+            //            '_task1' => (new Task(
+            //                name: $this->closureTask2,
+            //            ))->setCronExpression(new CronExpression('1,30 4,8,12 * 2,6,12 *')),
 
-            '_task1' => new TaskBag([
-                'task' => $this->closureTask2,
-                'cronExpression' => CronExpression::factory('1,30 4,8,12 * 2,6,12 *')
-            ]),
-
-            '_task2' => new TaskBag([
-                'task' => $this->closureTask2,
-                'cronExpression' => CronExpression::factory('30 12 1 1 *'),
-                'environments' => ['DEVELOPMENT']
-            ]),
+            //            '_task2' => (new Task(
+            //                name: 'temporary',
+            //                environments: ['DEVELOPMENT']
+            //            ))->setCronExpression(new CronExpression('30 12 1 1 *')),
         ];
     }
 
-    /**
-     * @return TaskRunner|PHPUnit_Framework_MockObject_MockObject
-     */
     protected function setupRunnerMock()
     {
         // Stub the execute tasks to return a list of build tasks ready for execution
@@ -123,7 +116,7 @@ class TaskRunnerTest extends PHPUnit_Framework_TestCase
 //            "failed to run correct executable tasks"
 //        );
 //    }
-    
+
 //    /** @test */
 //    public function TestLoadSpecificTask()
 //    {

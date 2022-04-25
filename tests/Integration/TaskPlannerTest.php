@@ -1,9 +1,9 @@
-<?php namespace Mistletoe\Test\Integration;
+<?php namespace ElectricJones\Mistletoe\Test\Integration;
 
-use Mistletoe\TaskPlanner;
-use Mistletoe\Test\ScenarioSetups;
+use ElectricJones\Mistletoe\TaskPlanner;
+use ElectricJones\Mistletoe\Test\ScenarioSetups;
 
-class TaskPlanneTest extends ScenarioSetups
+class TaskPlannerTest extends ScenarioSetups
 {
     /** @test */
     public function TestSimpleExpression()
@@ -42,7 +42,7 @@ class TaskPlanneTest extends ScenarioSetups
         $this->assertEquals('30 1 * * *', (string)$planner->getTask('TaskDailyOne')->getCronExpression(), "failed to set a simple expression");
 
         $planner->add('TaskDailyTwo')->daily()->atMidnight();
-        $this->assertEquals('00 24 * * *', (string)$planner->getTask('TaskDailyTwo')->getCronExpression(), "failed to set a simple expression");
+        $this->assertEquals('00 00 * * *', (string)$planner->getTask('TaskDailyTwo')->getCronExpression(), "failed to set a simple expression");
 
         $planner->add('TaskDailyThree')->at('7:49');
         $this->assertEquals('49 7 * * *', (string)$planner->getTask('TaskDailyThree')->getCronExpression(), "failed to set a simple expression");
@@ -92,16 +92,15 @@ class TaskPlanneTest extends ScenarioSetups
         $this->assertEquals($expected, (string)$planner->getTask('Task')->getCronExpression(), "failed to set a complex expression");
 
         /* Complex Scenario: “Every month on the 1st and 15th at 12:30 and 24:30” */
-        $expected = '30 12,24 1,15 * *';
+        $expected = '30 12,0 1,15 * *';
 
         $planner = new TaskPlanner();
         $planner->add('Task')
             ->monthly()
             ->at('12:30')
-            ->andAtHour(24)
+            ->andAtHour(0)
             ->onDay([1,15]);
 
         $this->assertEquals($expected, (string)$planner->getTask('Task')->getCronExpression(), "failed to set a complex expression");
     }
 }
-
